@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  db:
+    container_name: app-confra
+    image: bitnami/postgresql
+    restart: always
+    ports:
+      - "5440:5432"
+    environment:
+      - POSTGRESQL_USERNAME=sicoob
+      - POSTGRESQL_PASSWORD=sicoobapi
+      - POSTGRESQL_DATABASE=appconfradb
