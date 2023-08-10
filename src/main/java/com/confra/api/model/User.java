@@ -1,89 +1,70 @@
 package com.confra.api.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class User implements Serializable {
+import java.util.*;
 
-    private static final long serialVersionUID = 1L;
-
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "_user")
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
     private String codDocument;
     private Date dtRegistration;
     private String descName;
     private String email;
+    private String password;
     private String descDepartment;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
 
-    public User() {}
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public String getCodDocument() {
-        return codDocument;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public void setCodDocument(String codDocument) {
-        this.codDocument = codDocument;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public Date getDtRegistration() {
-        return dtRegistration;
-    }
-
-    public void setDtRegistration(Date dtRegistration) {
-        this.dtRegistration = dtRegistration;
-    }
-
-    public String getDescName() {
-        return descName;
-    }
-
-    public void setDescName(String descName) {
-        this.descName = descName;
-    }
-
-    public String getEmail() {
+    @Override
+    public String getUsername() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDescDepartment() {
-        return descDepartment;
-    }
-
-    public void setDescDepartment(String descDepartment) {
-        this.descDepartment = descDepartment;
-    }
-
-    public Integer getTotalInstallments() {
-        return totalInstallments;
-    }
-
-    public void setTotalInstallments(Integer totalInstallments) {
-        this.totalInstallments = totalInstallments;
-    }
-
-    public Integer getTotalInstallmentsPaid() {
-        return totalInstallmentsPaid;
-    }
-
-    public void setTotalInstallmentsPaid(Integer totalInstallmentsPaid) {
-        this.totalInstallmentsPaid = totalInstallmentsPaid;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(codDocument, user.codDocument) && Objects.equals(dtRegistration, user.dtRegistration) && Objects.equals(descName, user.descName) && Objects.equals(email, user.email) && Objects.equals(descDepartment, user.descDepartment) && Objects.equals(totalInstallments, user.totalInstallments) && Objects.equals(totalInstallmentsPaid, user.totalInstallmentsPaid);
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(codDocument, dtRegistration, descName, email, descDepartment, totalInstallments, totalInstallmentsPaid);
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
