@@ -1,4 +1,4 @@
-package com.confra.api.model.dto.authentication;
+package com.confra.api.model.dto.UserDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
