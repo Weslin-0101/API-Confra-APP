@@ -4,11 +4,18 @@ import com.confra.api.model.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
 import com.confra.api.repositories.UserRepository;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -39,4 +46,12 @@ public class UserService {
                 .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
                 .build();
     }
+    public List<User>findAll(){
+        return userRepository.findAll();
+    }
+    public User findById(UUID id){ return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado"));}
+
+    public User save(User user) { return userRepository.save(user); }
+
+    public void delete(User user) { userRepository.delete(); }
 }
