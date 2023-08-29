@@ -25,5 +25,6 @@ public class UserController {
     @GetMapping("/hello")
     public ResponseEntity<String> get() {
         return ResponseEntity.ok("Hello World");
+
     }
 }
