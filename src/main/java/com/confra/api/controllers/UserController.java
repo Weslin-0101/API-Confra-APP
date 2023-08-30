@@ -64,13 +64,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<User> deleteUser (@PathVariable(value = "id") UUID id){
-        Optional<User> userObject = Optional.ofNullable(userService.findById(id));
-        if (userObject.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        userService.delete(userObject.get());
-        return ResponseEntity.status(HttpStatus.OK).body(userObject.get());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser (@PathVariable(value = "id") UUID id){
+        userService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

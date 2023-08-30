@@ -4,6 +4,7 @@ import com.confra.api.model.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
 import com.confra.api.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +54,10 @@ public class UserService {
 
     public User save(User user) { return userRepository.save(user); }
 
-    public void delete(User user) { userRepository.delete(); }
+    public void delete(UUID id) {
+        var entity = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Não encontrado"));
+
+        userRepository.delete(entity);
+    }
 }
