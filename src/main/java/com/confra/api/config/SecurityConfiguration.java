@@ -27,6 +27,8 @@ public class SecurityConfiguration {
                     authorizationManagerRequestMatcherRegistry
                             .requestMatchers("root/confra/api/v1/create").permitAll()
                             .requestMatchers("root/confra/auth/v1/authenticate").permitAll()
+                            .requestMatchers("swagger-ui/**").permitAll()
+                            .requestMatchers("/v3/api-docs/**").permitAll()
                             .anyRequest().authenticated()
                 )
                 .sessionManagement(
