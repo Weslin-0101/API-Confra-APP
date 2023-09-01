@@ -20,48 +20,54 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(
-        value = "root/confra/api/v1"
-)
+@RequestMapping(value = "root/confra/api/v1/user")
 @AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
     @PostMapping("/create")
     public ResponseEntity<RegisterResponse> saveProduct(@RequestBody @Valid RegisterRequest registerRequest) {
-        var user = new User();
+        var user = userService.createAccount(registerRequest);
         BeanUtils.copyProperties(registerRequest, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createAccount(registerRequest));
     }
+
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<User>> findAll(){
         List<User> userList = userService.findAll();
-        if (!userList.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(userList);
+        if (userList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
+        userList.forEach(account -> {
+            try {
+                account.add(linkTo(methodOn(UserController.class).findById(account.getId())).withSelfRel());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         return ResponseEntity.status(HttpStatus.OK).body(userList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getOneUser(@PathVariable(value="id") UUID id){
+    public ResponseEntity<User> findById(@PathVariable(value="id") UUID id){
         var user = userService.findById(id);
         if (user == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-//      user.add(linkTo(methodOn(UserController.class).getAllUsers()).withRel("User List"));
+        user.add(linkTo(methodOn(UserController.class).findById(id)).withSelfRel());
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @PutMapping("/put/{id}")
-    public ResponseEntity<User> updateUser (@PathVariable(value = "id") UUID id,
-                                            @RequestBody @Valid RegisterRequest registerRequest){
-        Optional<User> userObject = Optional.ofNullable(userService.findById(id));
-        if (userObject.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        var user = userObject.get();
-        BeanUtils.copyProperties(registerRequest, user);
-        return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
+    @PutMapping("/{email}")
+    public ResponseEntity<User> updateUser (
+            @PathVariable(value = "email") String email,
+            @RequestBody @Valid RegisterRequest registerRequest
+    ){
+        var userUpdated = userService.updateUser(email, registerRequest);
+        userUpdated.add(linkTo(methodOn(UserController.class).updateUser(email, registerRequest)).withSelfRel());
+        BeanUtils.copyProperties(registerRequest, userUpdated);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
     }
 
     @DeleteMapping("/{id}")

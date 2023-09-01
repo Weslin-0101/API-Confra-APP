@@ -28,6 +28,7 @@ public class UserService {
     public RegisterResponse createAccount(RegisterRequest request) {
         var user = User.builder()
                 .descName(request.getDescName())
+                .dtRegistration(request.getDtRegistration())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .descDepartment(request.getDescDepartment())
@@ -39,7 +40,7 @@ public class UserService {
 
         return RegisterResponse.builder()
                 .id(user.getId())
-                .dtRegistration(new Date())
+                .dtRegistration(user.getDtRegistration())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .descDepartment(user.getDescDepartment())
@@ -50,13 +51,26 @@ public class UserService {
     public List<User>findAll(){
         return userRepository.findAll();
     }
-    public User findById(UUID id){ return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado"));}
 
-    public User save(User user) { return userRepository.save(user); }
+    public User updateUser(String email, RegisterRequest request) {
+        var entity = userRepository.findByEmail(email)
+                .orElseThrow();
+        entity.setDescName(request.getDescName());
+        entity.setDtRegistration(request.getDtRegistration());
+        entity.setEmail(request.getEmail());
+        entity.setPassword(request.getPassword());
+        entity.setDescDepartment(request.getDescDepartment());
+        entity.setTotalInstallments(request.getTotalInstallments());
+        entity.setTotalInstallmentsPaid(request.getTotalInstallmentsPaid());
+
+        return entity;
+    }
+
+    public User findById(UUID id){ return userRepository.findById(id).orElseThrow(() -> new RuntimeException("No records found for this ID"));}
 
     public void delete(UUID id) {
         var entity = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("No record found for this ID"));
 
         userRepository.delete(entity);
     }

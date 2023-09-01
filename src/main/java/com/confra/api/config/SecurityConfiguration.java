@@ -25,7 +25,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                     authorizationManagerRequestMatcherRegistry
-                            .requestMatchers("root/confra/api/v1/register").permitAll()
+                            .requestMatchers("root/confra/api/v1/create").permitAll()
                             .requestMatchers("root/confra/auth/v1/authenticate").permitAll()
                             .anyRequest().authenticated()
                 )
