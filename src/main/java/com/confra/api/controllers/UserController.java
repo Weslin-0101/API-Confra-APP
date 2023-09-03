@@ -48,7 +48,7 @@ public class UserController {
     public ResponseEntity<RegisterResponse> create(@RequestBody @Valid RegisterRequest registerRequest) {
         var user = userService.createAccount(registerRequest);
         BeanUtils.copyProperties(registerRequest, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createAccount(registerRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @GetMapping()
