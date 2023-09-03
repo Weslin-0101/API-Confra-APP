@@ -25,8 +25,10 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                     authorizationManagerRequestMatcherRegistry
-                            .requestMatchers("root/confra/api/v1/create").permitAll()
+                            .requestMatchers("root/confra/api/v1/user/create").permitAll()
                             .requestMatchers("root/confra/auth/v1/authenticate").permitAll()
+                            .requestMatchers("root/confra/api/v1/qrcode/generateByte/{id}").permitAll()
+                            .requestMatchers("root/confra/api/v1/qrcode/generateQRCode/{id}").permitAll()
                             .requestMatchers("swagger-ui/**").permitAll()
                             .requestMatchers("/v3/api-docs/**").permitAll()
                             .anyRequest().authenticated()

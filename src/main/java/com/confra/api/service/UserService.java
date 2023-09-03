@@ -41,11 +41,13 @@ public class UserService {
         return RegisterResponse.builder()
                 .id(user.getId())
                 .dtRegistration(user.getDtRegistration())
+                .descName(user.getDescName())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .descDepartment(user.getDescDepartment())
                 .totalInstallments(user.getTotalInstallments())
                 .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
+                .base64QRCode(user.getBase64QRCode())
                 .build();
     }
     public List<User>findAll(){

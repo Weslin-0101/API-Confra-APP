@@ -21,4 +21,5 @@ public class RegisterResponse {
     private String descDepartment;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
+    private byte[] base64QRCode;
 }

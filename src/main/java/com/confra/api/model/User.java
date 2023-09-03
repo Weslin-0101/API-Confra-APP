@@ -30,6 +30,7 @@ public class User extends RepresentationModel<User> implements UserDetails {
     private String descDepartment;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
+    private byte[] base64QRCode;
 
     @Enumerated(EnumType.STRING)
     private Role role;
