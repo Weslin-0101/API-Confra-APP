@@ -36,4 +36,6 @@ public class RegisterRequest {
 
     @NotNull
     private Integer totalInstallmentsPaid;
+
+    private byte[] base64QRCode;
 }

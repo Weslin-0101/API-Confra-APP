@@ -40,16 +40,17 @@ public class QRCodeController {
             }
     )
     public ResponseEntity<User> generateByteQRCode(@PathVariable(value = "id") UUID id) {
-        User userEntity = null;
-        User user = userService.findById(id);
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        } else {
-            userEntity = user;
-            userEntity.setBase64QRCode(MethodUtils.generateByteQRCode(userEntity.getEmail(), 250, 250));
-        }
+        User userEntity = userService.findById(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(userEntity);
+        if (userEntity == null) {
+            throw new RuntimeException("User not found");
+        }
+        String emailAndId = userEntity.getEmail() + " - " + id.toString();
+        byte[] qrCode = MethodUtils.generateByteQRCode(emailAndId, 250, 250);
+        userEntity.setBase64QRCode(qrCode);
+        User updatedUser = userService.updateBarcodeUser(id, qrCode);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
     }
 
     @GetMapping("/generateQRCode/{id}")
@@ -65,7 +66,7 @@ public class QRCodeController {
             }
     )
     public ResponseEntity<User> generateImageQRCode(@PathVariable(value = "id") UUID id) {
-        String imagePath = "./src/main/qrcode/images/QRCode.png";
+        String imagePath = "./src/main/java/com/confra/api/qrcode/QRCode.png";
         User userEntity = null;
         User user = userService.findById(id);
         if (user == null) {

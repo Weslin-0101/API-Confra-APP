@@ -68,6 +68,14 @@ public class UserService {
         return entity;
     }
 
+    public User updateBarcodeUser(UUID id, byte[] barcode) {
+        var entity = userRepository.findById(id)
+                .orElseThrow();
+        entity.setBase64QRCode(barcode);
+
+        return entity;
+    }
+
     public User findById(UUID id){ return userRepository.findById(id).orElseThrow(() -> new RuntimeException("No records found for this ID"));}
 
     public void delete(UUID id) {
