@@ -11,3 +11,17 @@ services:
       - POSTGRESQL_USERNAME=sicoob
       - POSTGRESQL_PASSWORD=sicoobapi
       - POSTGRESQL_DATABASE=appconfradb
+
+  confra-app:
+    container_name: app-confra-image
+    image: app-confra-image
+    build: .
+    working_dir: /app
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/appconfradb
+      - SPRING_DATASOURCE_USERNAME=sicoob
+      - SPRING_DATASOURCE_PASSWORD=sicoobapi
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
