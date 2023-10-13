@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5440/appconfradb
+    url: jdbc:postgresql://app-confra-db.cp6ibylrpfva.us-east-1.rds.amazonaws.com:5432/app_confra_db
     username: sicoob
     password: sicoobapi
 
