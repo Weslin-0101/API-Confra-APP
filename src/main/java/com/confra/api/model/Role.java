@@ -1,7 +1,18 @@
 package com.confra.api.model;
 
-public enum Role {
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
 
-    USER,
-    ADMIN
+@Getter
+@JsonFormat(shape = JsonFormat.Shape.STRING)
+public enum Role {
+    ADMIN("admin"),
+    USER("user");
+
+    private final String role;
+
+    Role(String role) {
+        this.role = role;
+    }
+
 }

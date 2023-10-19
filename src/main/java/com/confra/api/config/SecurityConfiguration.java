@@ -3,6 +3,7 @@ package com.confra.api.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,7 +26,11 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                     authorizationManagerRequestMatcherRegistry
-                            .requestMatchers("root/confra/api/v1/user/create").permitAll()
+                            .requestMatchers(HttpMethod.POST, "root/confra/api/v1/user/create").permitAll()
+                            .requestMatchers(HttpMethod.POST, "root/confra/api/v1/user/create-admin").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "root/confra/api/v1/user").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "root/confra/api/v1/user/{id}").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.DELETE, "root/confra/api/v1/user/{id}").permitAll()
                             .requestMatchers("root/confra/auth/v1/authenticate").permitAll()
                             .requestMatchers("swagger-ui/**").permitAll()
                             .requestMatchers("/v3/api-docs/**").permitAll()
