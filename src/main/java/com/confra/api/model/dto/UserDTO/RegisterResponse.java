@@ -1,5 +1,6 @@
 package com.confra.api.model.dto.UserDTO;
 
+import com.confra.api.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +17,10 @@ public class RegisterResponse {
     private UUID id;
     private Date dtRegistration;
     private String descName;
+    private String codDocument;
     private String email;
     private String password;
+    private Role role;
     private String descDepartment;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;

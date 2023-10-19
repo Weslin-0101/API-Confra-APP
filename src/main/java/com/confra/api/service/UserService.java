@@ -1,5 +1,6 @@
 package com.confra.api.service;
 
+import com.confra.api.model.Role;
 import com.confra.api.model.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
@@ -25,12 +26,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public RegisterResponse createAccount(RegisterRequest request) {
+    public RegisterResponse createAccount(RegisterRequest request, Boolean isAdmin) {
+        Role userRole = isAdmin ? Role.ADMIN : Role.USER;
+
         var user = User.builder()
                 .descName(request.getDescName())
+                .codDocument(request.getCodDocument())
                 .dtRegistration(request.getDtRegistration())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(userRole)
                 .descDepartment(request.getDescDepartment())
                 .totalInstallments(request.getTotalInstallments())
                 .totalInstallmentsPaid(request.getTotalInstallmentsPaid())
@@ -42,8 +47,40 @@ public class UserService {
                 .id(user.getId())
                 .dtRegistration(user.getDtRegistration())
                 .descName(user.getDescName())
+                .codDocument(user.getCodDocument())
                 .email(user.getEmail())
                 .password(user.getPassword())
+                .role(user.getRole())
+                .descDepartment(user.getDescDepartment())
+                .totalInstallments(user.getTotalInstallments())
+                .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
+                .base64QRCode(user.getBase64QRCode())
+                .build();
+    }
+
+    public RegisterResponse createAdminAccount(RegisterRequest request) {
+        var user = User.builder()
+                .descName(request.getDescName())
+                .codDocument(request.getCodDocument())
+                .dtRegistration(request.getDtRegistration())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.ADMIN)
+                .descDepartment(request.getDescDepartment())
+                .totalInstallments(request.getTotalInstallments())
+                .totalInstallmentsPaid(request.getTotalInstallmentsPaid())
+                .build();
+
+        userRepository.save(user);
+
+        return RegisterResponse.builder()
+                .id(user.getId())
+                .dtRegistration(user.getDtRegistration())
+                .descName(user.getDescName())
+                .codDocument(user.getCodDocument())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .role(user.getRole())
                 .descDepartment(user.getDescDepartment())
                 .totalInstallments(user.getTotalInstallments())
                 .totalInstallmentsPaid(user.getTotalInstallmentsPaid())

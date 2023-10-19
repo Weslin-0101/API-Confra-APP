@@ -36,8 +36,8 @@ public class UserController {
 
     @PostMapping("/create")
     @Operation(
-            summary = "Create a new Account",
-            description = "Returns a entity User",
+            summary = "Create a new User Account",
+            description = "Returns a User account entity",
             tags = { "Account" },
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200", content = { @Content(schema = @Schema(implementation = User.class)) }),
@@ -45,8 +45,25 @@ public class UserController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
             }
     )
-    public ResponseEntity<RegisterResponse> create(@RequestBody @Valid RegisterRequest registerRequest) {
-        var user = userService.createAccount(registerRequest);
+    public ResponseEntity<RegisterResponse> createUser(@RequestBody @Valid RegisterRequest registerRequest) {
+        var user = userService.createAccount(registerRequest, false);
+        BeanUtils.copyProperties(registerRequest, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PostMapping("/create-admin")
+    @Operation(
+            summary = "Create a new Admin Account",
+            description = "Returns a Admin account entity",
+            tags = { "Account" },
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200", content = { @Content(schema = @Schema(implementation = User.class)) }),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = { @Content(schema = @Schema(implementation = BadRequestSchema.class)) }),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
+            }
+    )
+    public ResponseEntity<RegisterResponse> createAdmin(@RequestBody @Valid RegisterRequest registerRequest) {
+        var user = userService.createAccount(registerRequest, true);
         BeanUtils.copyProperties(registerRequest, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
