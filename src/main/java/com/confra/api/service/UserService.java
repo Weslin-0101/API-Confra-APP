@@ -57,6 +57,36 @@ public class UserService {
                 .base64QRCode(user.getBase64QRCode())
                 .build();
     }
+
+    public RegisterResponse createAdminAccount(RegisterRequest request) {
+        var user = User.builder()
+                .descName(request.getDescName())
+                .codDocument(request.getCodDocument())
+                .dtRegistration(request.getDtRegistration())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.ADMIN)
+                .descDepartment(request.getDescDepartment())
+                .totalInstallments(request.getTotalInstallments())
+                .totalInstallmentsPaid(request.getTotalInstallmentsPaid())
+                .build();
+
+        userRepository.save(user);
+
+        return RegisterResponse.builder()
+                .id(user.getId())
+                .dtRegistration(user.getDtRegistration())
+                .descName(user.getDescName())
+                .codDocument(user.getCodDocument())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .descDepartment(user.getDescDepartment())
+                .totalInstallments(user.getTotalInstallments())
+                .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
+                .base64QRCode(user.getBase64QRCode())
+                .build();
+    }
     public List<User>findAll(){
         return userRepository.findAll();
     }
