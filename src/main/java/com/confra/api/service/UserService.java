@@ -4,6 +4,7 @@ import com.confra.api.model.Role;
 import com.confra.api.model.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
+import com.confra.api.qrcode.MethodUtils;
 import com.confra.api.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Id;
