@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,17 +41,9 @@ public class QRCodeController {
             }
     )
     public ResponseEntity<User> generateByteQRCode(@PathVariable(value = "id") UUID id) {
-        User userEntity = userService.findById(id);
+        User userEntity = userService.updateBase64User(id);
 
-        if (userEntity == null) {
-            throw new RuntimeException("User not found");
-        }
-        String emailAndId = userEntity.getEmail() + " - " + id.toString();
-        byte[] qrCode = MethodUtils.generateByteQRCode(emailAndId, 250, 250);
-        userEntity.setBase64QRCode(qrCode);
-        User updatedUser = userService.updateBarcodeUser(id, qrCode);
-
-        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+        return ResponseEntity.status(HttpStatus.OK).body(userEntity);
     }
 
     @GetMapping("/generateQRCode/{id}")
@@ -70,7 +63,7 @@ public class QRCodeController {
         User userEntity = null;
         User user = userService.findById(id);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new EntityNotFoundException("Não foi possível encontrar esse usuário pelo ID");
         } else {
             userEntity = user;
             MethodUtils.generateImageQRCode(userEntity.getEmail(), 250, 250, imagePath);
