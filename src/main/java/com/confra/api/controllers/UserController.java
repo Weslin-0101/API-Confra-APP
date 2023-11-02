@@ -15,13 +15,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -45,11 +43,12 @@ public class UserController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
             }
     )
-    public ResponseEntity<RegisterResponse> createUser(@RequestBody @Valid RegisterRequest registerRequest) {
-        var user = userService.createAccount(registerRequest, false);
-        BeanUtils.copyProperties(registerRequest, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
-    }
+        public ResponseEntity<RegisterResponse> createUser(@RequestBody @Valid RegisterRequest registerRequest) {
+            var user =  userService.createAccount(registerRequest, false);
+            BeanUtils.copyProperties(registerRequest, user);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        }
 
     @PostMapping("/create-admin")
     @Operation(
@@ -111,9 +110,6 @@ public class UserController {
     )
     public ResponseEntity<User> findById(@PathVariable(value="id") UUID id){
         var user = userService.findById(id);
-        if (user == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         user.add(linkTo(methodOn(UserController.class).findById(id)).withSelfRel());
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
