@@ -27,12 +27,16 @@ public class User extends RepresentationModel<User> implements UserDetails {
 
     @Column(length = 100)
     private String descName;
+
+    @Column(unique = true)
     private String email;
+
     private String password;
     private String descDepartment;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
     private byte[] base64QRCode;
+    private Boolean checkIn;
 
     @Enumerated(EnumType.STRING)
     private Role role;
