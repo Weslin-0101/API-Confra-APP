@@ -1,22 +1,19 @@
 package com.confra.api.service;
 
+import com.confra.api.exceptions.NotAllowedDuplicateValueException;
+import com.confra.api.exceptions.RequestNotAllowedException;
+import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.model.Role;
 import com.confra.api.model.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
 import com.confra.api.qrcode.MethodUtils;
 import com.confra.api.repositories.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +26,13 @@ public class UserService {
 
     public RegisterResponse createAccount(RegisterRequest request, Boolean isAdmin) {
         Role userRole = isAdmin ? Role.ADMIN : Role.USER;
+        Boolean checkIn = false;
+
+        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+
+        if (existingUser.isPresent()) {
+            throw new NotAllowedDuplicateValueException();
+        }
 
         var user = User.builder()
                 .descName(request.getDescName())
@@ -40,6 +44,7 @@ public class UserService {
                 .descDepartment(request.getDescDepartment())
                 .totalInstallments(request.getTotalInstallments())
                 .totalInstallmentsPaid(request.getTotalInstallmentsPaid())
+                .checkIn(checkIn)
                 .build();
 
         userRepository.save(user);
@@ -56,45 +61,17 @@ public class UserService {
                 .totalInstallments(user.getTotalInstallments())
                 .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
                 .base64QRCode(user.getBase64QRCode())
+                .checkIn(user.getCheckIn())
                 .build();
     }
 
-    public RegisterResponse createAdminAccount(RegisterRequest request) {
-        var user = User.builder()
-                .descName(request.getDescName())
-                .codDocument(request.getCodDocument())
-                .dtRegistration(request.getDtRegistration())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ADMIN)
-                .descDepartment(request.getDescDepartment())
-                .totalInstallments(request.getTotalInstallments())
-                .totalInstallmentsPaid(request.getTotalInstallmentsPaid())
-                .build();
-
-        userRepository.save(user);
-
-        return RegisterResponse.builder()
-                .id(user.getId())
-                .dtRegistration(user.getDtRegistration())
-                .descName(user.getDescName())
-                .codDocument(user.getCodDocument())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .role(user.getRole())
-                .descDepartment(user.getDescDepartment())
-                .totalInstallments(user.getTotalInstallments())
-                .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
-                .base64QRCode(user.getBase64QRCode())
-                .build();
-    }
     public List<User>findAll(){
         return userRepository.findAll();
     }
 
     public User updateUser(String email, RegisterRequest request) {
         var entity = userRepository.findByEmail(email)
-                .orElseThrow();
+                .orElseThrow(ResourceNotFoundException::new);
         entity.setDescName(request.getDescName());
         entity.setDtRegistration(request.getDtRegistration());
         entity.setEmail(request.getEmail());
@@ -106,19 +83,32 @@ public class UserService {
         return entity;
     }
 
-    public User updateBarcodeUser(UUID id, byte[] barcode) {
+    public User updateBase64User(UUID id) {
         var entity = userRepository.findById(id)
-                .orElseThrow();
-        entity.setBase64QRCode(barcode);
+                .orElseThrow(ResourceNotFoundException::new);
 
-        return entity;
+        if (entity.getCheckIn()) {
+            throw new RequestNotAllowedException();
+        }
+
+        String emailAndId = entity.getEmail() + " - " + id.toString();
+        byte[] qrCode = MethodUtils.generateByteQRCode(emailAndId, 250, 250);
+        entity.setBase64QRCode(qrCode);
+        entity.setCheckIn(true);
+
+        return userRepository.save(entity);
     }
 
-    public User findById(UUID id){ return userRepository.findById(id).orElseThrow(() -> new RuntimeException("No records found for this ID"));}
+    public User findById(UUID id){
+        return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(ResourceNotFoundException::new);
+    }
 
     public void delete(UUID id) {
-        var entity = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No record found for this ID"));
+        var entity = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
         userRepository.delete(entity);
     }

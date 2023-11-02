@@ -25,4 +25,5 @@ public class RegisterResponse {
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
     private byte[] base64QRCode;
+    private Boolean checkIn;
 }

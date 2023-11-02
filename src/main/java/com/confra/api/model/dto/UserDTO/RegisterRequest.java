@@ -47,4 +47,5 @@ public class RegisterRequest {
     private Integer totalInstallmentsPaid;
 
     private byte[] base64QRCode;
+    private Boolean checkIn;
 }
