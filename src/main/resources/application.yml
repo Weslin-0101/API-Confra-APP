@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5440/appconfradb
+    url: jdbc:postgresql://dpg-ckl8kc8u1l6c739guqgg-a.oregon-postgres.render.com:5432/app_confra_db
     username: sicoob
-    password: sicoobapi
+    password: bYlOfsUSG5ompCwDfD2PsHKD624uDcY3
 
   jpa:
     hibernate:
