@@ -4,6 +4,7 @@ import com.confra.api.docs.schemas.InternalServerErrorSchema;
 import com.confra.api.docs.schemas.NotFoundSchema;
 import com.confra.api.docs.schemas.UnauthorizedSchema;
 import com.confra.api.model.User;
+import com.confra.api.model.dto.UserDTO.RegisterResponse;
 import com.confra.api.qrcode.MethodUtils;
 import com.confra.api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,8 +41,8 @@ public class QRCodeController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
             }
     )
-    public ResponseEntity<User> generateByteQRCode(@PathVariable(value = "id") UUID id) {
-        User userEntity = userService.updateBase64User(id);
+    public ResponseEntity<RegisterResponse> generateByteQRCode(@PathVariable(value = "id") UUID id) {
+        RegisterResponse userEntity = userService.updateBase64User(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(userEntity);
     }

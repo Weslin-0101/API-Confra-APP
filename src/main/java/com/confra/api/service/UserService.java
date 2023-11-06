@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -83,7 +82,7 @@ public class UserService {
         return entity;
     }
 
-    public User updateBase64User(UUID id) {
+    public RegisterResponse updateBase64User(UUID id) {
         var entity = userRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
 
@@ -91,12 +90,25 @@ public class UserService {
             throw new RequestNotAllowedException();
         }
 
+        long randomNumber = userRepository.count();
         String emailAndId = entity.getEmail() + " - " + id.toString();
         byte[] qrCode = MethodUtils.generateByteQRCode(emailAndId, 250, 250);
         entity.setBase64QRCode(qrCode);
         entity.setCheckIn(true);
+        entity.setRandomNumber(randomNumber + 1);
 
-        return userRepository.save(entity);
+        userRepository.save(entity);
+
+        return RegisterResponse.builder()
+                .id(id)
+                .descName(entity.getDescName())
+                .email(entity.getEmail())
+                .password(entity.getPassword())
+                .role(entity.getRole())
+                .base64QRCode(entity.getBase64QRCode())
+                .checkIn(entity.getCheckIn())
+                .randomNumber(entity.getRandomNumber())
+                .build();
     }
 
     public User findById(UUID id){
