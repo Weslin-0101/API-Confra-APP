@@ -154,4 +154,10 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @DeleteMapping()
+    public ResponseEntity<?> deleteAll() {
+        userService.deleteALlUsers();
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

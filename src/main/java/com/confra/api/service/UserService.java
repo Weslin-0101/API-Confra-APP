@@ -124,4 +124,10 @@ public class UserService {
 
         userRepository.delete(entity);
     }
+
+    public void deleteALlUsers() {
+        var entity = userRepository.findAll();
+
+        userRepository.deleteAll(entity);
+    }
 }
