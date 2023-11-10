@@ -12,9 +12,8 @@ import com.confra.api.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -22,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private Set<Long> usedRandomNumbers = new HashSet<>();
 
     public RegisterResponse createAccount(RegisterRequest request, Boolean isAdmin) {
         Role userRole = isAdmin ? Role.ADMIN : Role.USER;
@@ -68,6 +68,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
+
+
     public User updateUser(String email, RegisterRequest request) {
         var entity = userRepository.findByEmail(email)
                 .orElseThrow(ResourceNotFoundException::new);
@@ -90,12 +92,13 @@ public class UserService {
             throw new RequestNotAllowedException();
         }
 
-        long randomNumber = userRepository.count();
-        String emailAndId = entity.getEmail() + " - " + id.toString();
-        byte[] qrCode = MethodUtils.generateByteQRCode(emailAndId, 250, 250);
-        entity.setBase64QRCode(qrCode);
+        long randomNumber = userRepository.getMaxUsers();
+        long uniqueRandomNumber = generateUniqueRandomNumber(randomNumber);
+//        String emailAndId = entity.getEmail() + " - " + id.toString();
+//        byte[] qrCode = MethodUtils.generateByteQRCode(emailAndId, 250, 250);
+//        entity.setBase64QRCode(qrCode);
         entity.setCheckIn(true);
-        entity.setRandomNumber(randomNumber + 1);
+        entity.setRandomNumber(uniqueRandomNumber);
 
         userRepository.save(entity);
 
@@ -105,7 +108,7 @@ public class UserService {
                 .email(entity.getEmail())
                 .password(entity.getPassword())
                 .role(entity.getRole())
-                .base64QRCode(entity.getBase64QRCode())
+//                .base64QRCode(entity.getBase64QRCode())
                 .checkIn(entity.getCheckIn())
                 .randomNumber(entity.getRandomNumber())
                 .build();
@@ -125,9 +128,13 @@ public class UserService {
         userRepository.delete(entity);
     }
 
-    public void deleteALlUsers() {
-        var entity = userRepository.findAll();
+    private long generateUniqueRandomNumber(long maxNumber) {
+        long random;
+        do {
+            random = (long) (Math.random() * maxNumber + 1);
+        } while (usedRandomNumbers.contains(random));
 
-        userRepository.deleteAll(entity);
+        usedRandomNumbers.add(random);
+        return random;
     }
 }
