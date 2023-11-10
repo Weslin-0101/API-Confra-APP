@@ -7,6 +7,7 @@ import com.confra.api.model.Role;
 import com.confra.api.model.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
+import com.confra.api.model.dto.UserDTO.UsersResponse;
 import com.confra.api.qrcode.MethodUtils;
 import com.confra.api.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -68,7 +69,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
+    public List<UsersResponse> returnAll() {
+        return userRepository.returnAllMembers();
+    }
 
     public User updateUser(String email, RegisterRequest request) {
         var entity = userRepository.findByEmail(email)

@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/{id}")).hasRole("ADMIN")
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/{email}")).hasRole("USER")
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/{id}")).hasRole("ADMIN")
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/sort")).hasRole("ADMIN")
                             .requestMatchers(mvc.pattern("root/confra/auth/v1/authenticate")).permitAll()
                             .requestMatchers(mvc.pattern("root/confra/api/v1/qrcode/generateByte/{id}")).hasRole("USER")
                             .requestMatchers(mvc.pattern("swagger-ui/**")).permitAll()
