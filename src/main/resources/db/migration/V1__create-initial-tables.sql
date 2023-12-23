@@ -1,7 +1,20 @@
+CREATE DATABASE appconfradb;
+
 CREATE TYPE ROLE as ENUM ('ADMIN', 'USER');
+
+CREATE TABLE IF NOT EXISTS public._department (
+    id_department BIGSERIAL NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(100) NOT NULL,
+    supervisor VARCHAR(50) NOT NULL,
+    dt_registration TIMESTAMP NOT NULL,
+
+    CONSTRAINT PK_department PRIMARY KEY (id_department)
+);
 
 CREATE TABLE IF NOT EXISTS public._user (
     id_user uuid NOT NULL,
+    id_Department BIGINT NOT NULL,
     cpf VARCHAR(11) NOT NULL,
     dt_registration TIMESTAMP NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -12,14 +25,6 @@ CREATE TABLE IF NOT EXISTS public._user (
     base64QRCode bytea NULL,
     role ROLE DEFAULT 'USER' NOT NULL,
 
-    CONSTRAINT pk_user PRIMARY KEY (id_user)
-);
-
-CREATE TABLE IF NOT EXISTS DEPARTMENT (
-    idDepartment INTEGER NOT NULL,
-    id_user uuid NOT NULL,
-    department VARCHAR(100) NOT NULL,
-
-    CONSTRAINT PK_DEPARTAMENT PRIMARY KEY (idDepartment),
-    CONSTRAINT FK_DEPARTAMENT_USER FOREIGN KEY (id_user) REFERENCES _user (id_user)
+    CONSTRAINT PK_user PRIMARY KEY (id_user),
+    CONSTRAINT FK_user_department FOREIGN KEY (id_Department) REFERENCES public._department (id_department)
 );
