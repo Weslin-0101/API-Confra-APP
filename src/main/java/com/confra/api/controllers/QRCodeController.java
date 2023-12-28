@@ -3,7 +3,7 @@ package com.confra.api.controllers;
 import com.confra.api.docs.schemas.InternalServerErrorSchema;
 import com.confra.api.docs.schemas.NotFoundSchema;
 import com.confra.api.docs.schemas.UnauthorizedSchema;
-import com.confra.api.model.User;
+import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.qrcode.MethodUtils;
 import com.confra.api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

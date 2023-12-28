@@ -1,23 +1,16 @@
 package com.confra.api.service;
 
 import com.confra.api.model.Role;
-import com.confra.api.model.User;
+import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
-import com.confra.api.qrcode.MethodUtils;
-import com.confra.api.repositories.UserRepository;
+import com.confra.api.infra.persistence.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

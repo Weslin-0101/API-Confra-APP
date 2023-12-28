@@ -4,7 +4,7 @@ import com.confra.api.docs.schemas.BadRequestSchema;
 import com.confra.api.docs.schemas.InternalServerErrorSchema;
 import com.confra.api.docs.schemas.NotFoundSchema;
 import com.confra.api.docs.schemas.UnauthorizedSchema;
-import com.confra.api.model.User;
+import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
 import com.confra.api.service.UserService;
@@ -15,13 +15,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;

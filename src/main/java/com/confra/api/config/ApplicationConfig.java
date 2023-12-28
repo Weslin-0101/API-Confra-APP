@@ -1,6 +1,6 @@
 package com.confra.api.config;
 
-import com.confra.api.repositories.UserRepository;
+import com.confra.api.infra.persistence.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
