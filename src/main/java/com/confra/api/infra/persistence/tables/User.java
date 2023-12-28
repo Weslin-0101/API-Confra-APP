@@ -1,5 +1,6 @@
-package com.confra.api.model;
+package com.confra.api.infra.persistence.tables;
 
+import com.confra.api.model.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
@@ -22,11 +23,12 @@ public class User extends RepresentationModel<User> implements UserDetails {
     private UUID id;
 
     @Column(length = 11)
-    private String codDocument;
+    private String cpf;
     private Date dtRegistration;
 
     @Column(length = 100)
-    private String descName;
+    private String name;
+    private String lastname;
     private String email;
     private String password;
     private String descDepartment;
