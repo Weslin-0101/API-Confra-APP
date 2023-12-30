@@ -24,8 +24,8 @@ public class UserService {
         Role userRole = isAdmin ? Role.ADMIN : Role.USER;
 
         var user = User.builder()
-                .descName(request.getDescName())
-                .codDocument(request.getCodDocument())
+                .name(request.getDescName())
+                .cpf(request.getCodDocument())
                 .dtRegistration(request.getDtRegistration())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -40,8 +40,8 @@ public class UserService {
         return RegisterResponse.builder()
                 .id(user.getId())
                 .dtRegistration(user.getDtRegistration())
-                .descName(user.getDescName())
-                .codDocument(user.getCodDocument())
+                .descName(user.getName())
+                .codDocument(user.getCpf())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .role(user.getRole())
@@ -54,8 +54,8 @@ public class UserService {
 
     public RegisterResponse createAdminAccount(RegisterRequest request) {
         var user = User.builder()
-                .descName(request.getDescName())
-                .codDocument(request.getCodDocument())
+                .name(request.getDescName())
+                .cpf(request.getCodDocument())
                 .dtRegistration(request.getDtRegistration())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -70,8 +70,8 @@ public class UserService {
         return RegisterResponse.builder()
                 .id(user.getId())
                 .dtRegistration(user.getDtRegistration())
-                .descName(user.getDescName())
-                .codDocument(user.getCodDocument())
+                .descName(user.getName())
+                .codDocument(user.getCpf())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .role(user.getRole())
@@ -88,7 +88,7 @@ public class UserService {
     public User updateUser(String email, RegisterRequest request) {
         var entity = userRepository.findByEmail(email)
                 .orElseThrow();
-        entity.setDescName(request.getDescName());
+        entity.setName(request.getDescName());
         entity.setDtRegistration(request.getDtRegistration());
         entity.setEmail(request.getEmail());
         entity.setPassword(request.getPassword());
