@@ -1,8 +1,7 @@
 package com.confra.api.authorizationJwt;
 
-import com.confra.api.exceptions.InvalidJwtAuthenticationException;
+import com.confra.api.main.exceptions.InvalidJwtAuthenticationException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;

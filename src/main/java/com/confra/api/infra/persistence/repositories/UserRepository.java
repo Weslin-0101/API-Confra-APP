@@ -1,7 +1,7 @@
 package com.confra.api.infra.persistence.repositories;
 
 import com.confra.api.infra.persistence.tables.User;
-import com.confra.api.model.dto.UserDTO.UsersResponse;
+import com.confra.api.main.controllers.dtos.user.UserDepartmentResponseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,5 +17,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Integer getMaxUsers();
 
     @Query("SELECT new com.confra.api.model.dto.UserDTO.UsersResponse(u.randomNumber, u.descName, u.descDepartment) FROM User u")
-    List<UsersResponse> returnAllMembers();
+    List<UserDepartmentResponseDTO> returnAllMembers();
 }

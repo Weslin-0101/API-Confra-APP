@@ -2,9 +2,10 @@ package com.confra.api.infra.controllers.UserController;
 
 import com.confra.api.application.useCases.CreateUserInteractor;
 import com.confra.api.domain.UserEntity;
-import com.confra.api.infra.controllers.dtos.user.RegisterRequestDTO;
-import com.confra.api.infra.controllers.dtos.user.RegisterResponseDTO;
-import com.confra.api.infra.controllers.dtos.user.UserDTOMapper;
+import com.confra.api.main.controllers.UserController.UserController;
+import com.confra.api.main.controllers.dtos.user.RegisterRequestDTO;
+import com.confra.api.main.controllers.dtos.user.RegisterResponseDTO;
+import com.confra.api.main.controllers.dtos.user.UserDTOMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +19,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
