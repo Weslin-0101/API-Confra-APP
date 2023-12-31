@@ -11,6 +11,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -21,19 +24,27 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                    authorizationManagerRequestMatcherRegistry
-                            .requestMatchers(HttpMethod.POST, "root/confra/api/v1/user/create").permitAll()
-                            .requestMatchers(HttpMethod.POST, "root/confra/api/v1/user/create-admin").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.GET, "root/confra/api/v1/user").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.GET, "root/confra/api/v1/user/{id}").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, "root/confra/api/v1/user/{id}").permitAll()
-                            .requestMatchers("root/confra/auth/v1/authenticate").permitAll()
-                            .requestMatchers("swagger-ui/**").permitAll()
-                            .requestMatchers("/v3/api-docs/**").permitAll()
+                        authorizationManagerRequestMatcherRegistry
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/create")).permitAll()
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/create-admin")).hasRole("ADMIN")
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/user")).hasRole("ADMIN")
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/{id}")).hasRole("ADMIN")
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/{email}")).hasRole("USER")
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/{id}")).hasRole("ADMIN")
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/sort")).hasRole("ADMIN")
+                            .requestMatchers(mvc.pattern("root/confra/auth/v1/authenticate")).permitAll()
+                            .requestMatchers(mvc.pattern("root/confra/api/v1/qrcode/generateByte/{id}")).hasRole("USER")
+                            .requestMatchers(mvc.pattern("swagger-ui/**")).permitAll()
+                            .requestMatchers(mvc.pattern("/v3/api-docs/**")).permitAll()
                             .anyRequest().authenticated()
                 )
                 .sessionManagement(

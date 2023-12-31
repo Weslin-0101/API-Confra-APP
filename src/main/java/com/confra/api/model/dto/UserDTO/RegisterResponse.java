@@ -1,6 +1,7 @@
 package com.confra.api.model.dto.UserDTO;
 
 import com.confra.api.model.Role;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RegisterResponse {
     private UUID id;
     private Date dtRegistration;
@@ -24,5 +26,7 @@ public class RegisterResponse {
     private String descDepartment;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
+    private Long randomNumber;
     private byte[] base64QRCode;
+    private Boolean checkIn;
 }

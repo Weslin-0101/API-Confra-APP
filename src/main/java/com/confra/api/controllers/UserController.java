@@ -7,6 +7,7 @@ import com.confra.api.docs.schemas.UnauthorizedSchema;
 import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.model.dto.UserDTO.RegisterRequest;
 import com.confra.api.model.dto.UserDTO.RegisterResponse;
+import com.confra.api.model.dto.UserDTO.UsersResponse;
 import com.confra.api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,11 +44,12 @@ public class UserController {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
             }
     )
-    public ResponseEntity<RegisterResponse> createUser(@RequestBody @Valid RegisterRequest registerRequest) {
-        var user = userService.createAccount(registerRequest, false);
-        BeanUtils.copyProperties(registerRequest, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
-    }
+        public ResponseEntity<RegisterResponse> createUser(@RequestBody @Valid RegisterRequest registerRequest) {
+            var user =  userService.createAccount(registerRequest, false);
+            BeanUtils.copyProperties(registerRequest, user);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        }
 
     @PostMapping("/create-admin")
     @Operation(
@@ -109,10 +111,28 @@ public class UserController {
     )
     public ResponseEntity<User> findById(@PathVariable(value="id") UUID id){
         var user = userService.findById(id);
-        if (user == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         user.add(linkTo(methodOn(UserController.class).findById(id)).withSelfRel());
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @GetMapping("/sort")
+    @Operation(
+            summary = "Find all Members for the raffle",
+            description = "Return all Users with your numberRandom, name and department information",
+            tags = { "Account" },
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200", content = { @Content(schema = @Schema(implementation = UsersResponse.class)) }),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = { @Content(schema = @Schema(implementation = BadRequestSchema.class)) }),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = { @Content(schema = @Schema(implementation = UnauthorizedSchema.class)) }),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
+            }
+    )
+    public ResponseEntity<List<UsersResponse>> returnAll() {
+        var user = userService.returnAll();
+        if (user.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
