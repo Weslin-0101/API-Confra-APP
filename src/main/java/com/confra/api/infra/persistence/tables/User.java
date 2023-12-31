@@ -20,22 +20,18 @@ public class User extends RepresentationModel<User> implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     @Column(length = 11)
-    private String codDocument;
+    private String cpf;
     private Date dtRegistration;
-
     @Column(length = 100)
-    private String descName;
-
+    private String name;
+    @Column(length = 100)
+    private String lastname;
     @Column(unique = true)
     private String email;
-
     private String password;
-    private String descDepartment;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
-    private Long randomNumber;
     private byte[] base64QRCode;
     private Boolean checkIn;
 

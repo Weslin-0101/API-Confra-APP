@@ -1,8 +1,7 @@
-package com.confra.api.infra.controllers.UserController;
+package com.confra.api.main.controllers.user;
 
 import com.confra.api.application.useCases.CreateUserInteractor;
 import com.confra.api.domain.UserEntity;
-import com.confra.api.main.controllers.UserController.UserController;
 import com.confra.api.main.controllers.dtos.user.RegisterRequestDTO;
 import com.confra.api.main.controllers.dtos.user.RegisterResponseDTO;
 import com.confra.api.main.controllers.dtos.user.UserDTOMapper;
@@ -20,10 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
 class UserControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -45,8 +45,8 @@ class UserControllerTest {
         Mockito.when(userDTOMapper.toRegisterResponse(createdUSer)).thenReturn(new RegisterResponseDTO());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/confra/api/v1/user/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }

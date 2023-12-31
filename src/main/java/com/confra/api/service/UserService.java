@@ -34,8 +34,8 @@ public class UserService {
         }
 
         var user = User.builder()
-                .descName(request.getName())
-                .codDocument(request.getCpf())
+                .name(request.getName())
+                .cpf(request.getCpf())
                 .dtRegistration(request.getDtRegistration())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -49,8 +49,8 @@ public class UserService {
         return RegisterResponseDTO.builder()
                 .id(user.getId())
                 .dtRegistration(user.getDtRegistration())
-                .name(user.getDescName())
-                .cpf(user.getCodDocument())
+                .name(user.getName())
+                .cpf(user.getCpf())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .totalInstallments(user.getTotalInstallments())
@@ -71,7 +71,7 @@ public class UserService {
     public User updateUser(String email, RegisterRequestDTO request) {
         var entity = userRepository.findByEmail(email)
                 .orElseThrow(ResourceNotFoundException::new);
-        entity.setDescName(request.getName());
+        entity.setName(request.getName());
         entity.setDtRegistration(request.getDtRegistration());
         entity.setEmail(request.getEmail());
         entity.setPassword(request.getPassword());
@@ -95,13 +95,12 @@ public class UserService {
 //        byte[] qrCode = MethodUtils.generateByteQRCode(emailAndId, 250, 250);
 //        entity.setBase64QRCode(qrCode);
         entity.setCheckIn(true);
-        entity.setRandomNumber(uniqueRandomNumber);
 
         userRepository.save(entity);
 
         return RegisterResponseDTO.builder()
                 .id(id)
-                .name(entity.getDescName())
+                .name(entity.getName())
                 .email(entity.getEmail())
                 .password(entity.getPassword())
 //                .base64QRCode(entity.getBase64QRCode())

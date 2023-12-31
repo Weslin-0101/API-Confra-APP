@@ -1,4 +1,4 @@
-package com.confra.api.main.controllers.UserController;
+package com.confra.api.main.controllers.user;
 
 import com.confra.api.application.useCases.CreateUserInteractor;
 import com.confra.api.domain.UserEntity;
