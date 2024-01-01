@@ -1,14 +1,16 @@
 package com.confra.api.application.useCases;
 
+import com.confra.api.application.gateways.UserFindByEmailGateway;
 import com.confra.api.domain.UserEntity;
 
 public class FindUserByEmailInteractor {
-    public FindUserByEmailInteractor() {}
+    private final UserFindByEmailGateway userFindByEmailGateway;
+
+    public FindUserByEmailInteractor(UserFindByEmailGateway userFindByEmailGateway) {
+        this.userFindByEmailGateway = userFindByEmailGateway;
+    }
 
     public UserEntity findUserByEmail (String email) {
-        UserEntity user = new UserEntity();
-        user.setEmail("teste@gmail.com");
-
-        return user;
+        return userFindByEmailGateway.findUserByEmail(email);
     }
 }
