@@ -1,6 +1,5 @@
 package com.confra.api.infra.persistence.tables;
 
-import com.confra.api.model.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
@@ -21,28 +20,24 @@ public class User extends RepresentationModel<User> implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     @Column(length = 11)
     private String cpf;
     private Date dtRegistration;
-
     @Column(length = 100)
     private String name;
+    @Column(length = 100)
     private String lastname;
+    @Column(unique = true)
     private String email;
     private String password;
-    private String descDepartment;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
     private byte[] base64QRCode;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private Boolean checkIn;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == Role.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.confra.api.authorizationJwt;
 
+import com.confra.api.main.exceptions.InvalidJwtAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -66,7 +67,8 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userEmail = extractUserEmail(token);
-        return (userEmail.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        if (userEmail.equals(userDetails.getUsername()) && !isTokenExpired(token)) return true;
+        throw new InvalidJwtAuthenticationException();
     }
 
     private boolean isTokenExpired(String token) {

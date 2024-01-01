@@ -1,17 +1,19 @@
 package com.confra.api.service;
 
-import com.confra.api.model.Role;
-import com.confra.api.infra.persistence.tables.User;
-import com.confra.api.model.dto.UserDTO.RegisterRequest;
-import com.confra.api.model.dto.UserDTO.RegisterResponse;
+import com.confra.api.main.controllers.dtos.user.RegisterRequestDTO;
+import com.confra.api.main.controllers.dtos.user.RegisterResponseDTO;
+import com.confra.api.main.exceptions.NotAllowedDuplicateValueException;
+import com.confra.api.main.exceptions.RequestNotAllowedException;
+import com.confra.api.main.exceptions.ResourceNotFoundException;
 import com.confra.api.infra.persistence.repositories.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.confra.api.infra.persistence.tables.User;
+import com.confra.api.domain.Role;
+import com.confra.api.main.controllers.dtos.user.UserDepartmentResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -19,101 +21,114 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private Set<Long> usedRandomNumbers = new HashSet<>();
 
-    public RegisterResponse createAccount(RegisterRequest request, Boolean isAdmin) {
+    public RegisterResponseDTO createAccount(RegisterRequestDTO request, Boolean isAdmin) {
         Role userRole = isAdmin ? Role.ADMIN : Role.USER;
+        Boolean checkIn = false;
+
+        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+
+        if (existingUser.isPresent()) {
+            throw new NotAllowedDuplicateValueException();
+        }
 
         var user = User.builder()
-                .name(request.getDescName())
-                .lastname(request.getDescName())
-                .cpf(request.getCodDocument())
+                .name(request.getName())
+                .cpf(request.getCpf())
                 .dtRegistration(request.getDtRegistration())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(userRole)
-                .descDepartment(request.getDescDepartment())
                 .totalInstallments(request.getTotalInstallments())
                 .totalInstallmentsPaid(request.getTotalInstallmentsPaid())
+                .checkIn(checkIn)
                 .build();
 
         userRepository.save(user);
 
-        return RegisterResponse.builder()
+        return RegisterResponseDTO.builder()
                 .id(user.getId())
                 .dtRegistration(user.getDtRegistration())
-                .descName(user.getName())
-                .codDocument(user.getCpf())
+                .name(user.getName())
+                .cpf(user.getCpf())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .role(user.getRole())
-                .descDepartment(user.getDescDepartment())
                 .totalInstallments(user.getTotalInstallments())
                 .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
                 .base64QRCode(user.getBase64QRCode())
+                .checkIn(user.getCheckIn())
                 .build();
     }
 
-    public RegisterResponse createAdminAccount(RegisterRequest request) {
-        var user = User.builder()
-                .name(request.getDescName())
-                .cpf(request.getCodDocument())
-                .dtRegistration(request.getDtRegistration())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ADMIN)
-                .descDepartment(request.getDescDepartment())
-                .totalInstallments(request.getTotalInstallments())
-                .totalInstallmentsPaid(request.getTotalInstallmentsPaid())
-                .build();
-
-        userRepository.save(user);
-
-        return RegisterResponse.builder()
-                .id(user.getId())
-                .dtRegistration(user.getDtRegistration())
-                .descName(user.getName())
-                .codDocument(user.getCpf())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .role(user.getRole())
-                .descDepartment(user.getDescDepartment())
-                .totalInstallments(user.getTotalInstallments())
-                .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
-                .base64QRCode(user.getBase64QRCode())
-                .build();
-    }
     public List<User>findAll(){
         return userRepository.findAll();
     }
 
-    public User updateUser(String email, RegisterRequest request) {
+    public List<UserDepartmentResponseDTO> returnAll() {
+        return userRepository.returnAllMembers();
+    }
+
+    public User updateUser(String email, RegisterRequestDTO request) {
         var entity = userRepository.findByEmail(email)
-                .orElseThrow();
-        entity.setName(request.getDescName());
+                .orElseThrow(ResourceNotFoundException::new);
+        entity.setName(request.getName());
         entity.setDtRegistration(request.getDtRegistration());
         entity.setEmail(request.getEmail());
         entity.setPassword(request.getPassword());
-        entity.setDescDepartment(request.getDescDepartment());
         entity.setTotalInstallments(request.getTotalInstallments());
         entity.setTotalInstallmentsPaid(request.getTotalInstallmentsPaid());
 
         return entity;
     }
 
-    public User updateBarcodeUser(UUID id, byte[] barcode) {
+    public RegisterResponseDTO updateBase64User(UUID id) {
         var entity = userRepository.findById(id)
-                .orElseThrow();
-        entity.setBase64QRCode(barcode);
+                .orElseThrow(ResourceNotFoundException::new);
 
-        return entity;
+        if (entity.getCheckIn()) {
+            throw new RequestNotAllowedException();
+        }
+
+        long randomNumber = userRepository.getMaxUsers();
+        long uniqueRandomNumber = generateUniqueRandomNumber(randomNumber);
+//        String emailAndId = entity.getEmail() + " - " + id.toString();
+//        byte[] qrCode = MethodUtils.generateByteQRCode(emailAndId, 250, 250);
+//        entity.setBase64QRCode(qrCode);
+        entity.setCheckIn(true);
+
+        userRepository.save(entity);
+
+        return RegisterResponseDTO.builder()
+                .id(id)
+                .name(entity.getName())
+                .email(entity.getEmail())
+                .password(entity.getPassword())
+//                .base64QRCode(entity.getBase64QRCode())
+                .checkIn(entity.getCheckIn())
+                .build();
     }
 
-    public User findById(UUID id){ return userRepository.findById(id).orElseThrow(() -> new RuntimeException("No records found for this ID"));}
+    public User findById(UUID id){
+        return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(ResourceNotFoundException::new);
+    }
 
     public void delete(UUID id) {
-        var entity = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No record found for this ID"));
+        var entity = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
         userRepository.delete(entity);
+    }
+
+    private long generateUniqueRandomNumber(long maxNumber) {
+        long random;
+        do {
+            random = (long) (Math.random() * maxNumber + 1);
+        } while (usedRandomNumbers.contains(random));
+
+        usedRandomNumbers.add(random);
+        return random;
     }
 }
