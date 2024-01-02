@@ -11,6 +11,8 @@ public class FindUserByEmailInteractor {
     }
 
     public UserEntity findUserByEmail (String email) {
+        if (email == null) throw new NullPointerException("Email is null");
+
         return userFindByEmailGateway.findUserByEmail(email);
     }
 }
