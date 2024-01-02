@@ -26,8 +26,7 @@ import java.util.UUID;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@RestController
-@RequestMapping(value = "root/confra/api/v1/user")
+
 @AllArgsConstructor
 public class UserController {
 

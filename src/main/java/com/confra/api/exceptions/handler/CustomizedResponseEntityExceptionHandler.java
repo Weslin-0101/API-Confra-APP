@@ -1,6 +1,6 @@
-package com.confra.api.main.exceptions.handler;
+package com.confra.api.exceptions.handler;
 
-import com.confra.api.main.exceptions.*;
+import com.confra.api.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

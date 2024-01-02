@@ -1,4 +1,4 @@
-package com.confra.api.main.exceptions;
+package com.confra.api.exceptions;
 
 import lombok.Getter;
 

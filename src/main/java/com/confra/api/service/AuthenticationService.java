@@ -1,7 +1,7 @@
 package com.confra.api.service;
 
 import com.confra.api.authorizationJwt.JwtService;
-import com.confra.api.main.exceptions.ResourceNotFoundException;
+import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.main.controllers.dtos.authentication.AuthenticateRequest;
 import com.confra.api.main.controllers.dtos.authentication.AuthenticationResponse;
 import com.confra.api.infra.persistence.repositories.UserRepository;

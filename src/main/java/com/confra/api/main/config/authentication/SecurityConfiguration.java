@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/create")).permitAll()
+                            .requestMatchers(mvc.pattern("confra/api/v1/user/create")).permitAll()
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/create-admin")).hasRole("ADMIN")
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user")).hasRole("ADMIN")
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/{id}")).hasRole("ADMIN")

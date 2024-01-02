@@ -1,18 +1,18 @@
-package com.confra.api.main.exceptions;
+package com.confra.api.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
-public class RequestNotAllowedException extends AuthenticationException {
+public class InvalidJwtAuthenticationException extends AuthenticationException {
     private static final long serialVersionUID = 1L;
 
-    public RequestNotAllowedException() {
-        super("Este usuário já fez check-in!");
+    public InvalidJwtAuthenticationException() {
+        super("Token JWT inválido ou expirado");
     }
 
-    public RequestNotAllowedException(String msg) {
+    public InvalidJwtAuthenticationException(String msg) {
         super(msg);
     }
 }

@@ -2,9 +2,9 @@ package com.confra.api.service;
 
 import com.confra.api.main.controllers.dtos.user.RegisterRequestDTO;
 import com.confra.api.main.controllers.dtos.user.RegisterResponseDTO;
-import com.confra.api.main.exceptions.NotAllowedDuplicateValueException;
-import com.confra.api.main.exceptions.RequestNotAllowedException;
-import com.confra.api.main.exceptions.ResourceNotFoundException;
+import com.confra.api.exceptions.NotAllowedDuplicateValueException;
+import com.confra.api.exceptions.RequestNotAllowedException;
+import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.infra.persistence.repositories.UserRepository;
 import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.domain.Role;
