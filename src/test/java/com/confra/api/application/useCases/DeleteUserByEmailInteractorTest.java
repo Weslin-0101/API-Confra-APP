@@ -2,6 +2,7 @@ package com.confra.api.application.useCases;
 
 import com.confra.api.application.gateways.DeleteUserByEmailGateway;
 import com.confra.api.domain.UserEntity;
+import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.mocks.MockUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,5 +33,14 @@ class DeleteUserByEmailInteractorTest {
         sut.deleteUserByEmail(request.getEmail());
 
         Mockito.verify(deleteUserByEmailGateway).deleteUserByEmail(request.getEmail());
+    }
+
+    @Test
+    void shouldThrowExceptionIfEmailsNotMatch() {
+        var request = user.mockUserEntity();
+
+        Mockito.doThrow(ResourceNotFoundException.class)
+                .when(deleteUserByEmailGateway)
+                .deleteUserByEmail(request.getEmail());
     }
 }
