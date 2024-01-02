@@ -38,4 +38,19 @@ class FindUserByEmailInteractorTest {
         assertNotNull(result);
         assertEquals(expectedResult.getEmail(), request.getEmail());
     }
+
+    @Test
+    void shouldReturnNullWhenUserNotFound() {
+        var request = mockUser.mockUserEntity();
+
+        Mockito.when(userGateway.findUserByEmail(request.getEmail())).thenReturn(null);
+        UserEntity result = sut.findUserByEmail(request.getEmail());
+
+        assertNull(result);
+    }
+
+    @Test
+    void shouldThrowNullPointerExceptionWhenEmailIsNull() {
+        assertThrows(NullPointerException.class, () -> sut.findUserByEmail(null));
+    }
 }
