@@ -2,6 +2,7 @@ package com.confra.api.application.useCases;
 
 import com.confra.api.application.gateways.UserGateway;
 import com.confra.api.domain.UserEntity;
+import com.confra.api.exceptions.RequiredObjectsIsNullException;
 import com.confra.api.mocks.MockUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,5 +47,11 @@ class CreateUserInteractorTest {
         assertEquals(expectedResult.getPassword(), result.getPassword());
         assertEquals(expectedResult.getTotalInstallments(), result.getTotalInstallments());
         assertEquals(expectedResult.getTotalInstallmentsPaid(), result.getTotalInstallmentsPaid());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserIsNull() {
+        assertThrows(RequiredObjectsIsNullException.class,
+                () -> sut.createUser(null));
     }
 }
