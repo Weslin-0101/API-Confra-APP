@@ -2,6 +2,7 @@ package com.confra.api.main.controllers.user;
 
 import com.confra.api.application.useCases.CreateUserInteractor;
 import com.confra.api.domain.UserEntity;
+import com.confra.api.main.config.authentication.JwtAuthenticationFilter;
 import com.confra.api.main.controllers.dtos.user.RegisterRequestDTO;
 import com.confra.api.main.controllers.dtos.user.RegisterResponseDTO;
 import com.confra.api.main.controllers.dtos.user.UserDTOMapper;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,12 +30,12 @@ class UserControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    @Mock
+    @MockBean
     private CreateUserInteractor createUserUsecase;
-    @Mock
+    @MockBean
     private UserDTOMapper userDTOMapper;
-    @InjectMocks
-    private UserController userController;
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Test
     void shouldRequestUserCreation() throws Exception {
