@@ -1,6 +1,7 @@
 package com.confra.api.infra.gateways;
 
 import com.confra.api.domain.UserEntity;
+import com.confra.api.exceptions.RequiredObjectsIsNullException;
 import com.confra.api.infra.persistence.repositories.UserRepository;
 import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.mocks.MockUser;
@@ -49,5 +50,13 @@ class UserRepositoryGatewayTest {
         assertEquals(request.getPassword(), result.getPassword());
         assertEquals(request.getTotalInstallments(), result.getTotalInstallments());
         assertEquals(request.getTotalInstallmentsPaid(), result.getTotalInstallmentsPaid());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenUserIsNull() {
+        RequiredObjectsIsNullException exception = assertThrows(RequiredObjectsIsNullException.class,
+                () -> sut.createUser(null));
+
+        assertEquals("User cannot be null", exception.getMessage());
     }
 }
