@@ -51,6 +51,7 @@ class FindUserByEmailInteractorTest {
 
     @Test
     void shouldThrowNullPointerExceptionWhenEmailIsNull() {
-        assertThrows(NullPointerException.class, () -> sut.findUserByEmail(null));
+        NullPointerException exception = assertThrows(NullPointerException.class, () -> sut.findUserByEmail(null));
+        assertEquals("Email is null", exception.getMessage());
     }
 }
