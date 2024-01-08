@@ -25,4 +25,19 @@ class UserEntityMapperTest {
         assertEquals(userEntity.getTotalInstallments(), user.getTotalInstallments());
         assertEquals(userEntity.getTotalInstallmentsPaid(), user.getTotalInstallmentsPaid());
     }
+
+    @Test
+    public void shouldReturnAnUserEntityToDomainObject() {
+        User user = mockUser.mockUserPersistence();
+        UserEntity userEntity = mapper.toDomainObject(user);
+
+        assertEquals(userEntity.getCpf(), user.getCpf());
+        assertEquals(userEntity.getDtRegistration(), user.getDtRegistration());
+        assertEquals(userEntity.getName(), user.getName());
+        assertEquals(userEntity.getLastname(), user.getLastname());
+        assertEquals(userEntity.getEmail(), user.getEmail());
+        assertEquals(userEntity.getPassword(), user.getPassword());
+        assertEquals(userEntity.getTotalInstallments(), user.getTotalInstallments());
+        assertEquals(userEntity.getTotalInstallmentsPaid(), user.getTotalInstallmentsPaid());
+    }
 }
