@@ -114,27 +114,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @GetMapping("/sort")
-    @Operation(
-            summary = "Find all Members for the raffle",
-            description = "Return all Users with your numberRandom, name and department information",
-            tags = { "Account" },
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200", content = { @Content(schema = @Schema(implementation = UserDepartmentResponseDTO.class)) }),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = { @Content(schema = @Schema(implementation = BadRequestSchema.class)) }),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = { @Content(schema = @Schema(implementation = UnauthorizedSchema.class)) }),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
-            }
-    )
-    public ResponseEntity<List<UserDepartmentResponseDTO>> returnAll() {
-        var user = userService.returnAll();
-        if (user.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(user);
-    }
-
     @PutMapping("/{email}")
     @Operation(
             summary = "Update a account",

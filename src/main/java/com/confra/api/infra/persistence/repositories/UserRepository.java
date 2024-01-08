@@ -15,7 +15,4 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT COUNT(u) from User u")
     Integer getMaxUsers();
-
-    @Query("SELECT new com.confra.api.model.dto.UserDTO.UsersResponse(u.randomNumber, u.descName, u.descDepartment) FROM User u")
-    List<UserDepartmentResponseDTO> returnAllMembers();
 }

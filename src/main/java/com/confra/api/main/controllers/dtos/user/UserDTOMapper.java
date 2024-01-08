@@ -5,6 +5,7 @@ import com.confra.api.domain.UserEntity;
 public class UserDTOMapper {
     public RegisterResponseDTO toRegisterResponse(UserEntity user) {
         return RegisterResponseDTO.builder()
+                .cpf(user.getCpf())
                 .dtRegistration(user.getDtRegistration())
                 .name(user.getName())
                 .lastname(user.getLastname())
@@ -17,6 +18,8 @@ public class UserDTOMapper {
 
     public UserEntity toUser(RegisterRequestDTO request) {
         UserEntity user = new UserEntity();
+        user.setCpf(request.getCpf());
+        user.setDtRegistration(request.getDtRegistration());
         user.setName(request.getName());
         user.setLastname(request.getLastname());
         user.setEmail(request.getEmail());

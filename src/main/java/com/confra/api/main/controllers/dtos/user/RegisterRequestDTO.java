@@ -33,6 +33,6 @@ public class RegisterRequestDTO {
     private Integer totalInstallments;
     @NotNull
     private Integer totalInstallmentsPaid;
-    private byte[] base64QRCode;
-    private Boolean checkIn;
+//    private byte[] base64QRCode;
+//    private Boolean checkIn;
 }

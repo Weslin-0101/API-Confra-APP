@@ -19,16 +19,16 @@ public class UserEntityMapper {
     }
 
     UserEntity toDomainObject(User user) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setCpf(user.getCpf());
-        userEntity.setDtRegistration(user.getDtRegistration());
-        userEntity.setName(user.getName());
-        userEntity.setLastname(user.getLastname());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setPassword(user.getPassword());
-        userEntity.setTotalInstallments(user.getTotalInstallments());
-        userEntity.setTotalInstallmentsPaid(user.getTotalInstallmentsPaid());
+        UserEntity userDomain = new UserEntity();
+        userDomain.setCpf(user.getCpf());
+        userDomain.setDtRegistration(user.getDtRegistration());
+        userDomain.setName(user.getName());
+        userDomain.setLastname(user.getLastname());
+        userDomain.setEmail(user.getEmail());
+        userDomain.setPassword(user.getPassword());
+        userDomain.setTotalInstallments(user.getTotalInstallments());
+        userDomain.setTotalInstallmentsPaid(user.getTotalInstallmentsPaid());
 
-        return userEntity;
+        return userDomain;
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
+
 @AllArgsConstructor
 public class UserService {
 
@@ -64,9 +64,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<UserDepartmentResponseDTO> returnAll() {
-        return userRepository.returnAllMembers();
-    }
 
     public User updateUser(String email, RegisterRequestDTO request) {
         var entity = userRepository.findByEmail(email)

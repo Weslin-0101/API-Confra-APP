@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-@RestController
+
 @RequestMapping("root/confra/api/v1/qrcode")
 @AllArgsConstructor
 public class QRCodeController {
