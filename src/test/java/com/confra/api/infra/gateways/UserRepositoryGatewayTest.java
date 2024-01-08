@@ -1,6 +1,7 @@
 package com.confra.api.infra.gateways;
 
 import com.confra.api.domain.UserEntity;
+import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
 import com.confra.api.infra.persistence.repositories.UserRepository;
 import com.confra.api.infra.persistence.tables.User;
@@ -11,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,6 +31,8 @@ class UserRepositoryGatewayTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         mockUser = new MockUser();
+        userEntityMapper = Mockito.mock(UserEntityMapper.class);
+        sut = new UserRepositoryGateway(userRepository, userEntityMapper);
     }
 
     @Test
@@ -58,5 +63,18 @@ class UserRepositoryGatewayTest {
                 () -> sut.createUser(null));
 
         assertEquals("User cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenUserAlreadyExists() {
+        UserEntity request = mockUser.mockUserEntity();
+
+        User existenceUser = new User();
+        Mockito.when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(existenceUser));
+
+        RequestNotAllowedException exception = assertThrows(RequestNotAllowedException.class,
+                () -> sut.createUser(request));
+
+        assertEquals("User already exists", exception.getMessage());
     }
 }
