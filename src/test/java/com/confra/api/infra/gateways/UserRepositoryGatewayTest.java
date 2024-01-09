@@ -3,6 +3,7 @@ package com.confra.api.infra.gateways;
 import com.confra.api.domain.UserEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
+import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.infra.persistence.repositories.UserRepository;
 import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.mocks.MockUser;
@@ -101,5 +102,29 @@ class UserRepositoryGatewayTest {
                 () -> sut.findUserByEmail(request.getEmail()));
 
         assertEquals("User not found", exception.getMessage());
+    }
+
+    @Test
+    public void shouldDeleteUserByEmail() {
+        UserEntity request = mockUser.mockUserEntity();
+        User userPersistence = new User();
+
+        Mockito.when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(userPersistence));
+
+        sut.deleteUserByEmail(request.getEmail());
+
+        Mockito.verify(userRepository, Mockito.times(1)).delete(userPersistence);
+    }
+
+    @Test
+    public void shouldThrowIfEmailNotFound() {
+        UserEntity request = mockUser.mockUserEntity();
+
+        Mockito.when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> sut.deleteUserByEmail(request.getEmail()));
+
+        assertEquals("Não foi possível encontrar esse usuário", exception.getMessage());
     }
 }
