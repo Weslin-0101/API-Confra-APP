@@ -8,6 +8,7 @@ import com.confra.api.application.useCases.CreateUserInteractor;
 import com.confra.api.application.useCases.DeleteUserByEmailInteractor;
 import com.confra.api.application.useCases.FindUserByEmailInteractor;
 import com.confra.api.application.useCases.UpdateUserInteractor;
+import com.confra.api.infra.adapters.JwtAdapter;
 import com.confra.api.main.controllers.dtos.user.UserDTOMapper;
 import com.confra.api.infra.gateways.UserEntityMapper;
 import com.confra.api.infra.gateways.UserRepositoryGateway;
@@ -52,23 +53,39 @@ public class UserConfig {
     }
 
     @Bean
-    UserGateway userGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
-        return new UserRepositoryGateway(userRepository, userEntityMapper);
+    UserGateway userGateway(
+            UserRepository userRepository,
+            UserEntityMapper userEntityMapper,
+            PasswordEncoder passwordEncoder
+    ) {
+        return new UserRepositoryGateway(userRepository, userEntityMapper, passwordEncoder);
     }
 
     @Bean
-    UserFindByEmailGateway userFindByEmailGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
-        return new UserRepositoryGateway(userRepository, userEntityMapper);
+    UserFindByEmailGateway userFindByEmailGateway(
+            UserRepository userRepository,
+            UserEntityMapper userEntityMapper,
+            PasswordEncoder passwordEncoder
+    ) {
+        return new UserRepositoryGateway(userRepository, userEntityMapper, passwordEncoder);
     }
 
     @Bean
-    UpdateUserGateway updateUserGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
-        return new UserRepositoryGateway(userRepository, userEntityMapper);
+    UpdateUserGateway updateUserGateway(
+            UserRepository userRepository,
+            UserEntityMapper userEntityMapper,
+            PasswordEncoder passwordEncoder
+    ) {
+        return new UserRepositoryGateway(userRepository, userEntityMapper, passwordEncoder);
     }
 
     @Bean
-    DeleteUserByEmailGateway deleteUserByEmailGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
-        return new UserRepositoryGateway(userRepository, userEntityMapper);
+    DeleteUserByEmailGateway deleteUserByEmailGateway(
+            UserRepository userRepository,
+            UserEntityMapper userEntityMapper,
+            PasswordEncoder passwordEncoder
+    ) {
+        return new UserRepositoryGateway(userRepository, userEntityMapper, passwordEncoder);
     }
 
     @Bean
@@ -81,28 +98,33 @@ public class UserConfig {
         return new UserDTOMapper();
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return username -> repository.findByEmail(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//    }
-//
-//    @Bean
-//    public AuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//        authProvider.setUserDetailsService(userDetailsService());
-//        authProvider.setPasswordEncoder(passwordEnconder());
-//
-//        return authProvider;
-//    }
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-//        return config.getAuthenticationManager();
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEnconder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    JwtAdapter jwtAdapter() {
+        return new JwtAdapter();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> repository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEnconder());
+
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEnconder() {
+        return new BCryptPasswordEncoder();
+    }
 }
