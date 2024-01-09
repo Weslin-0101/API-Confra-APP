@@ -66,7 +66,9 @@ public class UserRepositoryGateway implements
         entity.setTotalInstallments(newUser.getTotalInstallments());
         entity.setTotalInstallmentsPaid(newUser.getTotalInstallmentsPaid());
 
-        return userEntityMapper.toDomainObject(entity);
+
+        User savedUserEntity = userRepository.save(entity);
+        return userEntityMapper.toDomainObject(savedUserEntity);
     }
 
     @Override
