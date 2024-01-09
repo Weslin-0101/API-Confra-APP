@@ -1,11 +1,13 @@
 package com.confra.api.main.config.user;
 
 import com.confra.api.application.gateways.DeleteUserByEmailGateway;
+import com.confra.api.application.gateways.UpdateUserGateway;
 import com.confra.api.application.gateways.UserFindByEmailGateway;
 import com.confra.api.application.gateways.UserGateway;
 import com.confra.api.application.useCases.CreateUserInteractor;
 import com.confra.api.application.useCases.DeleteUserByEmailInteractor;
 import com.confra.api.application.useCases.FindUserByEmailInteractor;
+import com.confra.api.application.useCases.UpdateUserInteractor;
 import com.confra.api.main.controllers.dtos.user.UserDTOMapper;
 import com.confra.api.infra.gateways.UserEntityMapper;
 import com.confra.api.infra.gateways.UserRepositoryGateway;
@@ -40,6 +42,11 @@ public class UserConfig {
     }
 
     @Bean
+    UpdateUserInteractor updateUserInteractor (UpdateUserGateway updateUserGateway) {
+        return new UpdateUserInteractor(updateUserGateway);
+    }
+
+    @Bean
     DeleteUserByEmailInteractor deleteUserByEmailUsecase (DeleteUserByEmailGateway deleteUserByEmailGateway) {
         return new DeleteUserByEmailInteractor(deleteUserByEmailGateway);
     }
@@ -51,6 +58,11 @@ public class UserConfig {
 
     @Bean
     UserFindByEmailGateway userFindByEmailGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
+        return new UserRepositoryGateway(userRepository, userEntityMapper);
+    }
+
+    @Bean
+    UpdateUserGateway updateUserGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
         return new UserRepositoryGateway(userRepository, userEntityMapper);
     }
 
