@@ -105,6 +105,19 @@ class UserRepositoryGatewayTest {
     }
 
     @Test
+    public void shouldUpdateAnUser() {
+        UserEntity request = mockUser.mockUserEntity();
+        User userPersistence = new User();
+
+        Mockito.when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(userPersistence));
+        Mockito.when(userEntityMapper.toDomainObject(userPersistence)).thenReturn(request);
+
+        UserEntity result = sut.updateUser(request.getEmail(), request);
+
+        assertNotNull(result);
+    }
+
+    @Test
     public void shouldDeleteUserByEmail() {
         UserEntity request = mockUser.mockUserEntity();
         User userPersistence = new User();
