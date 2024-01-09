@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "confra/api/v1/user")
 @AllArgsConstructor
-public class UserController {
+public class CreateUserController {
     private final CreateUserInteractor createUserUsecase;
     private final UserDTOMapper userDTOMapper;
 
