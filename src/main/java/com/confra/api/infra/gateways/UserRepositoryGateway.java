@@ -39,6 +39,9 @@ public class UserRepositoryGateway implements UserGateway, UserFindByEmailGatewa
     @Override
     public UserEntity findUserByEmail(String email) {
         Optional<User> findUser = userRepository.findByEmail(email);
+        if (findUser.isEmpty()) {
+            throw new RequestNotAllowedException("User not found");
+        }
 
         return userEntityMapper.toDomainObject(findUser.get());
     }
