@@ -118,6 +118,18 @@ class UserRepositoryGatewayTest {
     }
 
     @Test
+    public void shouldThrowExceptionWhenEmailNotFound() {
+        UserEntity request = mockUser.mockUserEntity();
+
+        Mockito.when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> sut.updateUser(request.getEmail(), request));
+
+        assertEquals("Não foi possível encontrar esse usuário", exception.getMessage());
+    }
+
+    @Test
     public void shouldDeleteUserByEmail() {
         UserEntity request = mockUser.mockUserEntity();
         User userPersistence = new User();
