@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -26,6 +27,8 @@ class UserRepositoryGatewayTest {
     private UserRepository userRepository;
     @Mock
     private UserEntityMapper userEntityMapper;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     private MockUser mockUser;
 
     @BeforeEach
@@ -33,7 +36,7 @@ class UserRepositoryGatewayTest {
         MockitoAnnotations.openMocks(this);
         mockUser = new MockUser();
         userEntityMapper = Mockito.mock(UserEntityMapper.class);
-        sut = new UserRepositoryGateway(userRepository, userEntityMapper);
+        sut = new UserRepositoryGateway(userRepository, userEntityMapper, passwordEncoder);
     }
 
     @Test
@@ -45,6 +48,8 @@ class UserRepositoryGatewayTest {
         Mockito.when(userRepository.save(userPersistence)).thenReturn(userPersistence);
         Mockito.when(userEntityMapper.toDomainObject(userPersistence)).thenReturn(request);
 
+        Mockito.when(passwordEncoder.encode(request.getPassword())).thenReturn("hashedPassword");
+
         UserEntity result = sut.createUser(request);
 
         assertNotNull(result);
@@ -53,7 +58,7 @@ class UserRepositoryGatewayTest {
         assertEquals(request.getName(), result.getName());
         assertEquals(request.getLastname(), result.getLastname());
         assertEquals(request.getEmail(), result.getEmail());
-        assertEquals(request.getPassword(), result.getPassword());
+        assertEquals("hashedPassword", result.getPassword());
         assertEquals(request.getTotalInstallments(), result.getTotalInstallments());
         assertEquals(request.getTotalInstallmentsPaid(), result.getTotalInstallmentsPaid());
     }
