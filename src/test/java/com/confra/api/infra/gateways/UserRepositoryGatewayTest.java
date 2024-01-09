@@ -77,4 +77,17 @@ class UserRepositoryGatewayTest {
 
         assertEquals("User already exists", exception.getMessage());
     }
+
+    @Test
+    public void shouldFindUserByEmail() {
+        UserEntity request = mockUser.mockUserEntity();
+        User userPersistence = new User();
+
+        Mockito.when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(userPersistence));
+        Mockito.when(userEntityMapper.toDomainObject(userPersistence)).thenReturn(request);
+
+        UserEntity result = sut.findUserByEmail(request.getEmail());
+
+        assertNotNull(result);
+    }
 }
