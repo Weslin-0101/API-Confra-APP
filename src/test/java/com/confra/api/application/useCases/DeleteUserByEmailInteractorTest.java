@@ -43,4 +43,14 @@ class DeleteUserByEmailInteractorTest {
                 .when(deleteUserByEmailGateway)
                 .deleteUserByEmail(request.getEmail());
     }
+
+    @Test
+    void shouldThrowExceptionIfEmailIsNull() {
+        var request = user.mockUserEntity();
+        request.setEmail(null);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> sut.deleteUserByEmail(request.getEmail()));
+        assertEquals("Não foi possível encontrar esse usuário", exception.getMessage());
+    }
 }
