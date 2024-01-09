@@ -1,6 +1,6 @@
 package com.confra.api.main.controllers.user;
 
-import com.confra.api.application.useCases.DeleteUserByEmailInteractor;
+import com.confra.api.application.useCases.user.DeleteUserByEmailInteractor;
 import com.confra.api.main.docs.schemas.BadRequestSchema;
 import com.confra.api.main.docs.schemas.InternalServerErrorSchema;
 import com.confra.api.main.docs.schemas.NotFoundSchema;

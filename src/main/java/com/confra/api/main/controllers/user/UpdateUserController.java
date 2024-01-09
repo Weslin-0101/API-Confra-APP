@@ -1,6 +1,6 @@
 package com.confra.api.main.controllers.user;
 
-import com.confra.api.application.useCases.UpdateUserInteractor;
+import com.confra.api.application.useCases.user.UpdateUserInteractor;
 import com.confra.api.domain.UserEntity;
 import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.main.controllers.dtos.user.RegisterRequestDTO;

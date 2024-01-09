@@ -1,9 +1,9 @@
 package com.confra.api.infra.gateways;
 
-import com.confra.api.application.gateways.DeleteUserByEmailGateway;
-import com.confra.api.application.gateways.UpdateUserGateway;
-import com.confra.api.application.gateways.UserFindByEmailGateway;
-import com.confra.api.application.gateways.UserGateway;
+import com.confra.api.application.gateways.user.DeleteUserByEmailGateway;
+import com.confra.api.application.gateways.user.UpdateUserGateway;
+import com.confra.api.application.gateways.user.UserFindByEmailGateway;
+import com.confra.api.application.gateways.user.UserGateway;
 import com.confra.api.domain.UserEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;

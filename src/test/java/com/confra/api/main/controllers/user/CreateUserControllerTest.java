@@ -1,6 +1,6 @@
 package com.confra.api.main.controllers.user;
 
-import com.confra.api.application.useCases.CreateUserInteractor;
+import com.confra.api.application.useCases.user.CreateUserInteractor;
 import com.confra.api.domain.UserEntity;
 import com.confra.api.main.config.authentication.JwtAuthenticationFilter;
 import com.confra.api.main.controllers.dtos.user.RegisterRequestDTO;

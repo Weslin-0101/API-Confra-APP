@@ -1,13 +1,13 @@
 package com.confra.api.main.config.user;
 
-import com.confra.api.application.gateways.DeleteUserByEmailGateway;
-import com.confra.api.application.gateways.UpdateUserGateway;
-import com.confra.api.application.gateways.UserFindByEmailGateway;
-import com.confra.api.application.gateways.UserGateway;
-import com.confra.api.application.useCases.CreateUserInteractor;
-import com.confra.api.application.useCases.DeleteUserByEmailInteractor;
-import com.confra.api.application.useCases.FindUserByEmailInteractor;
-import com.confra.api.application.useCases.UpdateUserInteractor;
+import com.confra.api.application.gateways.user.DeleteUserByEmailGateway;
+import com.confra.api.application.gateways.user.UpdateUserGateway;
+import com.confra.api.application.gateways.user.UserFindByEmailGateway;
+import com.confra.api.application.gateways.user.UserGateway;
+import com.confra.api.application.useCases.user.CreateUserInteractor;
+import com.confra.api.application.useCases.user.DeleteUserByEmailInteractor;
+import com.confra.api.application.useCases.user.FindUserByEmailInteractor;
+import com.confra.api.application.useCases.user.UpdateUserInteractor;
 import com.confra.api.infra.adapters.JwtAdapter;
 import com.confra.api.main.controllers.dtos.user.UserDTOMapper;
 import com.confra.api.infra.gateways.UserEntityMapper;

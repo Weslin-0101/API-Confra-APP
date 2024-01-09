@@ -1,8 +1,8 @@
-package com.confra.api.application.useCases;
+package com.confra.api.application.useCases.user;
 
-import com.confra.api.application.gateways.UpdateUserGateway;
+import com.confra.api.application.gateways.user.UpdateUserGateway;
+import com.confra.api.application.useCases.user.UpdateUserInteractor;
 import com.confra.api.domain.UserEntity;
-import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.mocks.MockUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

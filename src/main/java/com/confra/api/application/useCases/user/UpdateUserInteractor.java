@@ -1,6 +1,6 @@
-package com.confra.api.application.useCases;
+package com.confra.api.application.useCases.user;
 
-import com.confra.api.application.gateways.UpdateUserGateway;
+import com.confra.api.application.gateways.user.UpdateUserGateway;
 import com.confra.api.domain.UserEntity;
 
 public class UpdateUserInteractor {

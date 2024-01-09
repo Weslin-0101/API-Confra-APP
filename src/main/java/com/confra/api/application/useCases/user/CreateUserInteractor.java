@@ -1,6 +1,6 @@
-package com.confra.api.application.useCases;
+package com.confra.api.application.useCases.user;
 
-import com.confra.api.application.gateways.UserGateway;
+import com.confra.api.application.gateways.user.UserGateway;
 import com.confra.api.domain.UserEntity;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
 

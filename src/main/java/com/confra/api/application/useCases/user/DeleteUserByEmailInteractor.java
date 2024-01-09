@@ -1,6 +1,6 @@
-package com.confra.api.application.useCases;
+package com.confra.api.application.useCases.user;
 
-import com.confra.api.application.gateways.DeleteUserByEmailGateway;
+import com.confra.api.application.gateways.user.DeleteUserByEmailGateway;
 import com.confra.api.exceptions.ResourceNotFoundException;
 
 public class DeleteUserByEmailInteractor {

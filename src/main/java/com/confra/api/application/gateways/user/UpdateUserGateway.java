@@ -1,4 +1,4 @@
-package com.confra.api.application.gateways;
+package com.confra.api.application.gateways.user;
 
 import com.confra.api.domain.UserEntity;
 

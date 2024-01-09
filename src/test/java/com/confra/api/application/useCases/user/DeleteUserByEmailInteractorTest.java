@@ -1,7 +1,7 @@
-package com.confra.api.application.useCases;
+package com.confra.api.application.useCases.user;
 
-import com.confra.api.application.gateways.DeleteUserByEmailGateway;
-import com.confra.api.domain.UserEntity;
+import com.confra.api.application.gateways.user.DeleteUserByEmailGateway;
+import com.confra.api.application.useCases.user.DeleteUserByEmailInteractor;
 import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.mocks.MockUser;
 import org.junit.jupiter.api.BeforeEach;
