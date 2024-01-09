@@ -1,4 +1,4 @@
-package com.confra.api.authorizationJwt;
+package com.confra.api.infra.adapters;
 
 import com.confra.api.exceptions.InvalidJwtAuthenticationException;
 import io.jsonwebtoken.Claims;
@@ -8,7 +8,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
@@ -17,7 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 
-public class JwtService {
+public class JwtAdapter {
 
     @Value("${application.security.jwt.secret-key}")
     private String SECRET_KEY;
