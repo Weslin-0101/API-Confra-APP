@@ -90,4 +90,16 @@ class UserRepositoryGatewayTest {
 
         assertNotNull(result);
     }
+
+    @Test
+    public void shouldThrowExceptionWhenUserNotFound() {
+        UserEntity request = mockUser.mockUserEntity();
+
+        Mockito.when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
+
+        RequestNotAllowedException exception = assertThrows(RequestNotAllowedException.class,
+                () -> sut.findUserByEmail(request.getEmail()));
+
+        assertEquals("User not found", exception.getMessage());
+    }
 }
