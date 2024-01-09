@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                             .requestMatchers(mvc.pattern("confra/api/v1/user/create")).permitAll()
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/create-admin")).hasRole("ADMIN")
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user")).hasRole("ADMIN")
-                            .requestMatchers(mvc.pattern("root/confra/api/v1/user/{id}")).hasRole("ADMIN")
+                            .requestMatchers(mvc.pattern("confra/api/v1/user/{email}")).permitAll()
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/{email}")).hasRole("USER")
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/{id}")).hasRole("ADMIN")
                             .requestMatchers(mvc.pattern("root/confra/api/v1/user/sort")).hasRole("ADMIN")
