@@ -1,5 +1,6 @@
 package com.confra.api.infra.gateways;
 
+import com.confra.api.application.gateways.UserFindByEmailGateway;
 import com.confra.api.application.gateways.UserGateway;
 import com.confra.api.domain.UserEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
@@ -9,7 +10,7 @@ import com.confra.api.infra.persistence.tables.User;
 
 import java.util.Optional;
 
-public class UserRepositoryGateway implements UserGateway {
+public class UserRepositoryGateway implements UserGateway, UserFindByEmailGateway {
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
 
@@ -33,5 +34,12 @@ public class UserRepositoryGateway implements UserGateway {
         User savedUserEntity = userRepository.save(userPersistence);
 
         return userEntityMapper.toDomainObject(savedUserEntity);
+    }
+
+    @Override
+    public UserEntity findUserByEmail(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+
+        return userEntityMapper.toDomainObject(findUser.get());
     }
 }
