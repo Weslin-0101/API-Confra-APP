@@ -1,6 +1,7 @@
 package com.confra.api.infra.gateways;
 
 import com.confra.api.application.gateways.DeleteUserByEmailGateway;
+import com.confra.api.application.gateways.UpdateUserGateway;
 import com.confra.api.application.gateways.UserFindByEmailGateway;
 import com.confra.api.application.gateways.UserGateway;
 import com.confra.api.domain.UserEntity;
@@ -12,7 +13,12 @@ import com.confra.api.infra.persistence.tables.User;
 
 import java.util.Optional;
 
-public class UserRepositoryGateway implements UserGateway, UserFindByEmailGateway, DeleteUserByEmailGateway {
+public class UserRepositoryGateway implements
+        UserGateway,
+        UserFindByEmailGateway,
+        UpdateUserGateway,
+        DeleteUserByEmailGateway {
+
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
 
@@ -46,6 +52,21 @@ public class UserRepositoryGateway implements UserGateway, UserFindByEmailGatewa
         }
 
         return userEntityMapper.toDomainObject(findUser.get());
+    }
+
+    @Override
+    public UserEntity updateUser(String email, UserEntity newUser) {
+        var entity = userRepository.findByEmail(email)
+                .orElseThrow(ResourceNotFoundException::new);
+        entity.setCpf(newUser.getCpf());
+        entity.setDtRegistration(newUser.getDtRegistration());
+        entity.setName(newUser.getName());
+        entity.setLastname(newUser.getLastname());
+        entity.setEmail(newUser.getEmail());
+        entity.setTotalInstallments(newUser.getTotalInstallments());
+        entity.setTotalInstallmentsPaid(newUser.getTotalInstallmentsPaid());
+
+        return userEntityMapper.toDomainObject(entity);
     }
 
     @Override
