@@ -1,16 +1,18 @@
 package com.confra.api.infra.gateways;
 
+import com.confra.api.application.gateways.DeleteUserByEmailGateway;
 import com.confra.api.application.gateways.UserFindByEmailGateway;
 import com.confra.api.application.gateways.UserGateway;
 import com.confra.api.domain.UserEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
+import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.infra.persistence.repositories.UserRepository;
 import com.confra.api.infra.persistence.tables.User;
 
 import java.util.Optional;
 
-public class UserRepositoryGateway implements UserGateway, UserFindByEmailGateway {
+public class UserRepositoryGateway implements UserGateway, UserFindByEmailGateway, DeleteUserByEmailGateway {
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
 
@@ -44,5 +46,15 @@ public class UserRepositoryGateway implements UserGateway, UserFindByEmailGatewa
         }
 
         return userEntityMapper.toDomainObject(findUser.get());
+    }
+
+    @Override
+    public void deleteUserByEmail(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+        if (findUser.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+
+        userRepository.delete(findUser.get());
     }
 }
