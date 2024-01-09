@@ -33,16 +33,6 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    @Operation(
-            summary = "Create a new User Account",
-            description = "Returns a User account entity",
-            tags = { "Account" },
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200", content = { @Content(schema = @Schema(implementation = User.class)) }),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = { @Content(schema = @Schema(implementation = BadRequestSchema.class)) }),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
-            }
-    )
         public ResponseEntity<RegisterResponseDTO> createUser(@RequestBody @Valid RegisterRequestDTO registerRequest) {
             var user =  userService.createAccount(registerRequest, false);
             BeanUtils.copyProperties(registerRequest, user);
@@ -51,16 +41,6 @@ public class UserController {
         }
 
     @PostMapping("/create-admin")
-    @Operation(
-            summary = "Create a new Admin Account",
-            description = "Returns a Admin account entity",
-            tags = { "Account" },
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200", content = { @Content(schema = @Schema(implementation = User.class)) }),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = { @Content(schema = @Schema(implementation = BadRequestSchema.class)) }),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
-            }
-    )
     public ResponseEntity<RegisterResponseDTO> createAdmin(@RequestBody @Valid RegisterRequestDTO registerRequest) {
         var user = userService.createAccount(registerRequest, true);
         BeanUtils.copyProperties(registerRequest, user);
@@ -96,18 +76,6 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @Operation(
-            summary = "Find account by ID UUID",
-            description = "Returns a entity Account by ID UUID",
-            tags = { "Account" },
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200", content = { @Content(schema = @Schema(implementation = User.class)) }),
-                    @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = { @Content(schema = @Schema(implementation = UnauthorizedSchema.class)) }),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = { @Content(schema = @Schema(implementation = NotFoundSchema.class)) }),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
-            }
-    )
     public ResponseEntity<User> findById(@PathVariable(value="id") UUID id){
         var user = userService.findById(id);
         user.add(linkTo(methodOn(UserController.class).findById(id)).withSelfRel());
@@ -137,19 +105,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(
-            summary = "Delete a account",
-            description = "Delete a entity Account by email",
-            tags = { "Account" },
-            responses = {
-                    @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = { @Content(schema = @Schema(implementation = BadRequestSchema.class)) }),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = { @Content(schema = @Schema(implementation = UnauthorizedSchema.class)) }),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = { @Content(schema = @Schema(implementation = NotFoundSchema.class)) }),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = { @Content(schema = @Schema(implementation = InternalServerErrorSchema.class)) })
-            }
-    )
     public ResponseEntity<?> deleteUser (@PathVariable(value = "id") UUID id){
         userService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
