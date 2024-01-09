@@ -10,6 +10,7 @@ import com.confra.api.exceptions.RequiredObjectsIsNullException;
 import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.infra.persistence.repositories.UserRepository;
 import com.confra.api.infra.persistence.tables.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -21,10 +22,13 @@ public class UserRepositoryGateway implements
 
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
-
-    public UserRepositoryGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
+    private final PasswordEncoder passwordEncoder;
+    public UserRepositoryGateway(
+            UserRepository userRepository, UserEntityMapper userEntityMapper, PasswordEncoder passwordEncoder
+    ) {
         this.userRepository = userRepository;
         this.userEntityMapper = userEntityMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,6 +41,8 @@ public class UserRepositoryGateway implements
         if (findUser.isPresent()) {
             throw new RequestNotAllowedException("User already exists");
         }
+
+        userDomain.setPassword(passwordEncoder.encode(userDomain.getPassword()));
 
         User userPersistence = userEntityMapper.toEntity(userDomain);
         User savedUserEntity = userRepository.save(userPersistence);
