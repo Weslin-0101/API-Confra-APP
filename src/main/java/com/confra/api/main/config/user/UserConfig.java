@@ -1,7 +1,9 @@
 package com.confra.api.main.config.user;
 
+import com.confra.api.application.gateways.UserFindByEmailGateway;
 import com.confra.api.application.gateways.UserGateway;
 import com.confra.api.application.useCases.CreateUserInteractor;
+import com.confra.api.application.useCases.FindUserByEmailInteractor;
 import com.confra.api.main.controllers.dtos.user.UserDTOMapper;
 import com.confra.api.infra.gateways.UserEntityMapper;
 import com.confra.api.infra.gateways.UserRepositoryGateway;
@@ -31,7 +33,17 @@ public class UserConfig {
     }
 
     @Bean
+    FindUserByEmailInteractor findUserByEmailUsecase (UserFindByEmailGateway userFindByEmailGateway) {
+        return new FindUserByEmailInteractor(userFindByEmailGateway);
+    }
+
+    @Bean
     UserGateway userGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
+        return new UserRepositoryGateway(userRepository, userEntityMapper);
+    }
+
+    @Bean
+    UserFindByEmailGateway userFindByEmailGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
         return new UserRepositoryGateway(userRepository, userEntityMapper);
     }
 
