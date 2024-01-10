@@ -10,4 +10,8 @@ public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException() {
         super("Não foi possível encontrar esse usuário");
     }
+
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
 }

@@ -1,15 +1,17 @@
 package com.confra.api.infra.gateways.departmentGateway;
 
 import com.confra.api.application.gateways.department.CreateDepartmentGateway;
+import com.confra.api.application.gateways.department.FindDepartmentGateway;
 import com.confra.api.domain.DepartmentEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
+import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.infra.persistence.repositories.DepartmentRepository;
 import com.confra.api.infra.persistence.tables.Department;
 
 import java.util.Optional;
 
-public class DepartmentRepositoryGateway implements CreateDepartmentGateway {
+public class DepartmentRepositoryGateway implements CreateDepartmentGateway, FindDepartmentGateway {
     private final DepartmentRepository departmentRepository;
     private final DepartmentEntityMapper departmentEntityMapper;
 
@@ -33,5 +35,15 @@ public class DepartmentRepositoryGateway implements CreateDepartmentGateway {
         Department savedDepartmentEntity = departmentRepository.save(departmentPersistence);
 
         return departmentEntityMapper.toDomainObject(savedDepartmentEntity);
+    }
+
+    @Override
+    public DepartmentEntity findDepartmentById(String name) {
+        Optional<Department> findDepartment = departmentRepository.findByName(name);
+        if (findDepartment.isEmpty()) {
+            throw new ResourceNotFoundException("Department not found");
+        }
+
+        return departmentEntityMapper.toDomainObject(findDepartment.get());
     }
 }
