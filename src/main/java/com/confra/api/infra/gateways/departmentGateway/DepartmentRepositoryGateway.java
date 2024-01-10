@@ -24,7 +24,7 @@ public class DepartmentRepositoryGateway implements CreateDepartmentGateway {
             throw new RequiredObjectsIsNullException("Department cannot be null");
         }
 
-        Optional<DepartmentEntity> findDepartment = departmentRepository.findByName(departmentEntity.getName());
+        Optional<Department> findDepartment = departmentRepository.findByName(departmentEntity.getName());
         if (findDepartment.isPresent()) {
             throw new RequestNotAllowedException("Department already exists");
         }
