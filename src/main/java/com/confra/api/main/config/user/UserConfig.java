@@ -9,6 +9,8 @@ import com.confra.api.application.useCases.user.DeleteUserByEmailInteractor;
 import com.confra.api.application.useCases.user.FindUserByEmailInteractor;
 import com.confra.api.application.useCases.user.UpdateUserInteractor;
 import com.confra.api.infra.adapters.JwtAdapter;
+import com.confra.api.infra.useCases.AuthenticationUserInteractor;
+import com.confra.api.infra.useCases.AuthenticationUserUseCase;
 import com.confra.api.main.controllers.dtos.user.UserDTOMapper;
 import com.confra.api.infra.gateways.UserEntityMapper;
 import com.confra.api.infra.gateways.UserRepositoryGateway;
@@ -50,6 +52,15 @@ public class UserConfig {
     @Bean
     DeleteUserByEmailInteractor deleteUserByEmailUsecase (DeleteUserByEmailGateway deleteUserByEmailGateway) {
         return new DeleteUserByEmailInteractor(deleteUserByEmailGateway);
+    }
+
+    @Bean
+    AuthenticationUserInteractor authenticationUserInteractor (
+            UserRepository userRepository,
+            JwtAdapter jwtAdapter,
+            AuthenticationManager authenticationManager
+    ) {
+        return new AuthenticationUserInteractor(userRepository, jwtAdapter, authenticationManager);
     }
 
     @Bean
