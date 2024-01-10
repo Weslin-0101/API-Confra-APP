@@ -2,6 +2,7 @@ package com.confra.api.application.useCases.department;
 
 import com.confra.api.application.gateways.department.CreateDepartmentGateway;
 import com.confra.api.domain.DepartmentEntity;
+import com.confra.api.exceptions.RequiredObjectsIsNullException;
 import com.confra.api.mocks.MockDepartment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,5 +41,11 @@ public class CreateDepartmentInteractorTest {
         assertEquals(expectedResult.getDtRegistration(), result.getDtRegistration());
         assertEquals(expectedResult.getDtRegistration(), result.getDtRegistration());
         assertEquals(expectedResult.getDtRegistration(), result.getDtRegistration());
+    }
+
+    @Test
+    public void shouldThrowIfDepartmentIsNull() {
+        RequiredObjectsIsNullException exception = assertThrows(RequiredObjectsIsNullException.class, () -> sut.createDepartment(null));
+        assertEquals("Department is null", exception.getMessage());
     }
 }
