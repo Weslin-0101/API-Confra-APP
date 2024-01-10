@@ -2,12 +2,14 @@ package com.confra.api.infra.persistence.tables;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.Date;
 
 @Builder
 @Entity
 @Table(name = "_department")
+@Data
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
