@@ -1,9 +1,11 @@
-package com.confra.api.infra.gateways;
+package com.confra.api.infra.gateways.userGateway;
 
 import com.confra.api.domain.UserEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
 import com.confra.api.exceptions.ResourceNotFoundException;
+import com.confra.api.infra.gateways.userGateway.UserEntityMapper;
+import com.confra.api.infra.gateways.userGateway.UserRepositoryGateway;
 import com.confra.api.infra.persistence.repositories.UserRepository;
 import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.mocks.MockUser;

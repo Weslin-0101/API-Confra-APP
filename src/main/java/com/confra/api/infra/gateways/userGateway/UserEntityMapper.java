@@ -1,10 +1,10 @@
-package com.confra.api.infra.gateways;
+package com.confra.api.infra.gateways.userGateway;
 
 import com.confra.api.domain.UserEntity;
 import com.confra.api.infra.persistence.tables.User;
 
 public class UserEntityMapper {
-    User toEntity(UserEntity userDomain) {
+    public User toEntity(UserEntity userDomain) {
         User user = new User();
         user.setCpf(userDomain.getCpf());
         user.setDtRegistration(userDomain.getDtRegistration());
@@ -18,7 +18,7 @@ public class UserEntityMapper {
         return user;
     }
 
-    UserEntity toDomainObject(User user) {
+    public UserEntity toDomainObject(User user) {
         UserEntity userDomain = new UserEntity();
         userDomain.setCpf(user.getCpf());
         userDomain.setDtRegistration(user.getDtRegistration());

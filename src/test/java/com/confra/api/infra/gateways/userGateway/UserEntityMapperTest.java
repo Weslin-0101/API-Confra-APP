@@ -1,6 +1,7 @@
-package com.confra.api.infra.gateways;
+package com.confra.api.infra.gateways.userGateway;
 
 import com.confra.api.domain.UserEntity;
+import com.confra.api.infra.gateways.userGateway.UserEntityMapper;
 import com.confra.api.infra.persistence.tables.User;
 import com.confra.api.mocks.MockUser;
 import org.junit.jupiter.api.Test;
