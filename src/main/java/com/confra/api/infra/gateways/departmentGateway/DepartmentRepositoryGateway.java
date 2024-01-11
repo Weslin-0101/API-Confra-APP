@@ -2,6 +2,7 @@ package com.confra.api.infra.gateways.departmentGateway;
 
 import com.confra.api.application.gateways.department.CreateDepartmentGateway;
 import com.confra.api.application.gateways.department.FindDepartmentGateway;
+import com.confra.api.application.gateways.department.UpdateDepartmentGateway;
 import com.confra.api.domain.DepartmentEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
@@ -11,7 +12,11 @@ import com.confra.api.infra.persistence.tables.Department;
 
 import java.util.Optional;
 
-public class DepartmentRepositoryGateway implements CreateDepartmentGateway, FindDepartmentGateway {
+public class DepartmentRepositoryGateway implements
+        CreateDepartmentGateway,
+        FindDepartmentGateway,
+        UpdateDepartmentGateway
+{
     private final DepartmentRepository departmentRepository;
     private final DepartmentEntityMapper departmentEntityMapper;
 
@@ -45,5 +50,19 @@ public class DepartmentRepositoryGateway implements CreateDepartmentGateway, Fin
         }
 
         return departmentEntityMapper.toDomainObject(findDepartment.get());
+    }
+
+    @Override
+    public DepartmentEntity updateDepartment(String name, DepartmentEntity newDepartment) {
+        var findDepartment = departmentRepository.findByName(name)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        findDepartment.setName(newDepartment.getName());
+        findDepartment.setDescription(newDepartment.getDescription());
+        findDepartment.setSupervisor(newDepartment.getSupervisor());
+
+        Department updatedDepartment = departmentRepository.save(findDepartment);
+
+        return departmentEntityMapper.toDomainObject(updatedDepartment);
     }
 }
