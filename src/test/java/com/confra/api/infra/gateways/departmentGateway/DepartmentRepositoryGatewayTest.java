@@ -3,6 +3,7 @@ package com.confra.api.infra.gateways.departmentGateway;
 import com.confra.api.domain.DepartmentEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
+import com.confra.api.exceptions.ResourceNotFoundException;
 import com.confra.api.infra.persistence.repositories.DepartmentRepository;
 import com.confra.api.infra.persistence.tables.Department;
 import com.confra.api.mocks.MockDepartment;
@@ -73,5 +74,32 @@ class DepartmentRepositoryGatewayTest {
         );
 
         assertEquals("Department already exists", exception.getMessage());
+    }
+
+    @Test
+    public void shouldFindDepartmentByName() {
+        DepartmentEntity request = mockDepartment.mockDepartmentEntity();
+        Department departmentPersistence = new Department();
+
+        Mockito.when(departmentRepository.findByName(request.getName())).thenReturn(Optional.of(departmentPersistence));
+        Mockito.when(departmentEntityMapper.toDomainObject(departmentPersistence)).thenReturn(request);
+
+        DepartmentEntity result = sut.findDepartmentById(request.getName());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenDepartmentNotFound() {
+        DepartmentEntity request = mockDepartment.mockDepartmentEntity();
+
+        Mockito.when(departmentRepository.findByName(request.getName())).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> sut.findDepartmentById(request.getName())
+        );
+
+        assertEquals("Department not found", exception.getMessage());
     }
 }
