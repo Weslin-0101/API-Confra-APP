@@ -133,4 +133,28 @@ class DepartmentRepositoryGatewayTest {
                 () -> sut.updateDepartment(request.getName(), request)
         );
     }
+
+    @Test
+    public void shouldDeleteDepartment() {
+        DepartmentEntity request = mockDepartment.mockDepartmentEntity();
+        Department departmentPersistence = new Department();
+
+        Mockito.when(departmentRepository.findByName(request.getName())).thenReturn(Optional.of(departmentPersistence));
+
+        sut.deleteDepartment(request.getName());
+
+        Mockito.verify(departmentRepository, Mockito.times(1)).delete(departmentPersistence);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenDepartmentNameNotFoundOnDelete() {
+        DepartmentEntity request = mockDepartment.mockDepartmentEntity();
+
+        Mockito.when(departmentRepository.findByName(request.getName())).thenReturn(Optional.empty());
+
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> sut.deleteDepartment(request.getName())
+        );
+    }
 }
