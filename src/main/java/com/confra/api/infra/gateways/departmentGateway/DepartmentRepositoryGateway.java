@@ -1,6 +1,7 @@
 package com.confra.api.infra.gateways.departmentGateway;
 
 import com.confra.api.application.gateways.department.CreateDepartmentGateway;
+import com.confra.api.application.gateways.department.DeleteDepartmentGateway;
 import com.confra.api.application.gateways.department.FindDepartmentGateway;
 import com.confra.api.application.gateways.department.UpdateDepartmentGateway;
 import com.confra.api.domain.DepartmentEntity;
@@ -15,7 +16,8 @@ import java.util.Optional;
 public class DepartmentRepositoryGateway implements
         CreateDepartmentGateway,
         FindDepartmentGateway,
-        UpdateDepartmentGateway
+        UpdateDepartmentGateway,
+        DeleteDepartmentGateway
 {
     private final DepartmentRepository departmentRepository;
     private final DepartmentEntityMapper departmentEntityMapper;
@@ -64,5 +66,13 @@ public class DepartmentRepositoryGateway implements
         Department updatedDepartment = departmentRepository.save(findDepartment);
 
         return departmentEntityMapper.toDomainObject(updatedDepartment);
+    }
+
+    @Override
+    public void deleteDepartment(String departmentName) {
+        Optional<Department> findDepartment = departmentRepository.findByName(departmentName);
+        if (findDepartment.isEmpty()) throw new ResourceNotFoundException("Department not found");
+
+        departmentRepository.delete(findDepartment.get());
     }
 }
