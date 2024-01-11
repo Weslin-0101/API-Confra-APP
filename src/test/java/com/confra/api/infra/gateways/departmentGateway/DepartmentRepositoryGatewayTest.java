@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,5 +102,35 @@ class DepartmentRepositoryGatewayTest {
         );
 
         assertEquals("Department not found", exception.getMessage());
+    }
+
+    @Test
+    public void shouldUpdateDepartment() {
+        DepartmentEntity request = mockDepartment.mockDepartmentEntity();
+        Department departmentPersistence = new Department();
+
+        Mockito.when(departmentRepository.findByName(request.getName())).thenReturn(Optional.of(departmentPersistence));
+        Mockito.when(departmentRepository.save(departmentPersistence)).thenReturn(departmentPersistence);
+        Mockito.when(departmentEntityMapper.toDomainObject(departmentPersistence)).thenReturn(request);
+
+        DepartmentEntity result = sut.updateDepartment(request.getName(), request);
+
+        assertNotNull(result);
+        assertEquals(request.getName(), result.getName());
+        assertEquals(request.getDescription(), result.getDescription());
+        assertEquals(request.getSupervisor(), result.getSupervisor());
+        assertEquals(request.getDtRegistration(), result.getDtRegistration());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenDepartmentNameNotFound() {
+        DepartmentEntity request = mockDepartment.mockDepartmentEntity();
+
+        Mockito.when(departmentRepository.findByName(request.getName())).thenReturn(Optional.empty());
+
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> sut.updateDepartment(request.getName(), request)
+        );
     }
 }
