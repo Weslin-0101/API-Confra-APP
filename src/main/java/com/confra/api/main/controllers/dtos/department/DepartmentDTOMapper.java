@@ -8,6 +8,7 @@ public class DepartmentDTOMapper {
                 .name(department.getName())
                 .description(department.getDescription())
                 .supervisor(department.getSupervisor())
+                .dtRegistration(department.getDtRegistration())
                 .build();
     }
 

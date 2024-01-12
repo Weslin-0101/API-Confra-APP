@@ -11,6 +11,7 @@ import com.confra.api.application.useCases.department.UpdateDepartmentInteractor
 import com.confra.api.infra.gateways.departmentGateway.DepartmentEntityMapper;
 import com.confra.api.infra.gateways.departmentGateway.DepartmentRepositoryGateway;
 import com.confra.api.infra.persistence.repositories.DepartmentRepository;
+import com.confra.api.main.controllers.dtos.department.DepartmentDTOMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -66,5 +67,15 @@ public class DepartmentConfig {
             DepartmentEntityMapper departmentEntityMapper
     ) {
         return new DepartmentRepositoryGateway(departmentRepository, departmentEntityMapper);
+    }
+
+    @Bean
+    DepartmentEntityMapper departmentEntityMapper() {
+        return new DepartmentEntityMapper();
+    }
+
+    @Bean
+    DepartmentDTOMapper departmentDTOMapper() {
+        return new DepartmentDTOMapper();
     }
 }

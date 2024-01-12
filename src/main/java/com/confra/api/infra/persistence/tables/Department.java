@@ -6,13 +6,13 @@ import lombok.Data;
 
 import java.util.Date;
 
-@Builder
 @Entity
 @Table(name = "_department")
 @Data
+@Builder
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDepartment;
     @Column(length = 100, unique = true, nullable = false)
     private String name;
@@ -22,6 +22,17 @@ public class Department {
     private String supervisor;
     private Date dtRegistration;
     private Date dtUpdate;
+
+    @PrePersist
+    protected void onCreate() {
+        this.dtRegistration = new Date();
+        this.dtUpdate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.dtUpdate = new Date();
+    }
 
     public Department(
         Long idDepartment,
