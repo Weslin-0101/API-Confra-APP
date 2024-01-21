@@ -45,6 +45,10 @@ public class UserRepositoryGateway implements
 
         userDomain.setPassword(passwordEncoder.encode(userDomain.getPassword()));
 
+        String randomCode = RandomString.generateRandomString(64);
+        userDomain.setVerificationCode(randomCode);
+        userDomain.setVerified(false);
+
         User userPersistence = userEntityMapper.toEntity(userDomain);
         User savedUserEntity = userRepository.save(userPersistence);
 

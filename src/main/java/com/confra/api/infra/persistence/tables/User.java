@@ -32,6 +32,8 @@ public class User extends RepresentationModel<User> implements UserDetails {
     private String password;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
+    private String verificationCode;
+    private Boolean verified;
     private byte[] base64QRCode;
     private Boolean checkIn;
 
@@ -67,6 +69,6 @@ public class User extends RepresentationModel<User> implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.verified;
     }
 }

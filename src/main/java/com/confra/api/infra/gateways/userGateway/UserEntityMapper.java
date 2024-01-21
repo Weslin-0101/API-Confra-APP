@@ -14,6 +14,8 @@ public class UserEntityMapper {
         user.setPassword(userDomain.getPassword());
         user.setTotalInstallments(userDomain.getTotalInstallments());
         user.setTotalInstallmentsPaid(userDomain.getTotalInstallmentsPaid());
+        user.setVerificationCode(userDomain.getVerificationCode());
+        user.setVerified(userDomain.getVerified());
 
         return user;
     }
@@ -29,6 +31,8 @@ public class UserEntityMapper {
         userDomain.setPassword(user.getPassword());
         userDomain.setTotalInstallments(user.getTotalInstallments());
         userDomain.setTotalInstallmentsPaid(user.getTotalInstallmentsPaid());
+        userDomain.setVerificationCode(user.getVerificationCode());
+        userDomain.setVerified(user.getVerified());
 
         return userDomain;
     }

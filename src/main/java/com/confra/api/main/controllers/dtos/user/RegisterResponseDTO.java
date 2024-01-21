@@ -24,6 +24,8 @@ public class RegisterResponseDTO {
     private String password;
     private Integer totalInstallments;
     private Integer totalInstallmentsPaid;
+    private String verificationCode;
+    private Boolean verified;
     private byte[] base64QRCode;
     private Boolean checkIn;
 }

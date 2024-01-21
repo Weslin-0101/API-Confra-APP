@@ -14,6 +14,8 @@ public class UserDTOMapper {
                 .password(user.getPassword())
                 .totalInstallments(user.getTotalInstallments())
                 .totalInstallmentsPaid(user.getTotalInstallmentsPaid())
+                .verificationCode(user.getVerificationCode())
+                .verified(user.getVerified())
                 .build();
     }
 
