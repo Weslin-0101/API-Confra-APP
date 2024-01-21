@@ -16,7 +16,9 @@ public class MockUser {
                 "teste@gmail.com",
                 "123456",
                 4,
-                4
+                4,
+                "LrvuydPKplZEwXc5ay11sS0MAaqdJ4W8nTLnlNNTpGh9DRDh2S03IjG2WUiyWpVr",
+                false
         );
 
         return userEntity;
@@ -35,6 +37,8 @@ public class MockUser {
         user.setTotalInstallmentsPaid(4);
         user.setBase64QRCode(null);
         user.setCheckIn(false);
+        user.setVerificationCode("LrvuydPKplZEwXc5ay11sS0MAaqdJ4W8nTLnlNNTpGh9DRDh2S03IjG2WUiyWpVr");
+        user.setVerified(false);
 
         return user;
     }

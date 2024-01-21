@@ -39,7 +39,9 @@ public class UpdateUserInteractorTest {
                 "teste@gmail.com",
                 "123456",
                 4,
-                4
+                4,
+                "LrvuydPKplZEwXc5ay11sS0MAaqdJ4W8nTLnlNNTpGh9DRDh2S03IjG2WUiyWpVr",
+                false
         );
 
         Mockito.when(updateGateway.updateUser(user.getEmail(), newUser)).thenReturn(newUser);
