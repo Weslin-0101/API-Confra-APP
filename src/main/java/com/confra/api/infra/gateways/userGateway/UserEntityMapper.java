@@ -20,6 +20,7 @@ public class UserEntityMapper {
 
     public UserEntity toDomainObject(User user) {
         UserEntity userDomain = new UserEntity();
+        userDomain.setId(user.getId());
         userDomain.setCpf(user.getCpf());
         userDomain.setDtRegistration(user.getDtRegistration());
         userDomain.setName(user.getName());

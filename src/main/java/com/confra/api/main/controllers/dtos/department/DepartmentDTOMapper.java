@@ -5,6 +5,7 @@ import com.confra.api.domain.DepartmentEntity;
 public class DepartmentDTOMapper {
     public DepartmentResponseDTO toRegisterResponse (DepartmentEntity department) {
         return DepartmentResponseDTO.builder()
+                .id(department.getId())
                 .name(department.getName())
                 .description(department.getDescription())
                 .supervisor(department.getSupervisor())

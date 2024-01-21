@@ -5,6 +5,7 @@ import com.confra.api.domain.UserEntity;
 public class UserDTOMapper {
     public RegisterResponseDTO toRegisterResponse(UserEntity user) {
         return RegisterResponseDTO.builder()
+                .id(user.getId())
                 .cpf(user.getCpf())
                 .dtRegistration(user.getDtRegistration())
                 .name(user.getName())

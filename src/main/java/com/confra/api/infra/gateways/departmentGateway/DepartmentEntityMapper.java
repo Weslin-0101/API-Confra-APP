@@ -19,6 +19,7 @@ public class DepartmentEntityMapper implements EntityMapper<Department, Departme
     @Override
     public DepartmentEntity toDomainObject(Department department) {
         DepartmentEntity departmentEntity = new DepartmentEntity();
+        departmentEntity.setId(department.getIdDepartment());
         departmentEntity.setName(department.getName());
         departmentEntity.setDescription(department.getDescription());
         departmentEntity.setSupervisor(department.getSupervisor());

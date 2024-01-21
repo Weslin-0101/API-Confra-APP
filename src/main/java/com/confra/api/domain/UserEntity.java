@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 public class UserEntity {
+    private UUID id;
     private String cpf;
     private Date dtRegistration;
     private String name;
