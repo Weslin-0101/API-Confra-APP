@@ -1,4 +1,4 @@
-package com.confra.api.infra.gateways.userGateway;
+package com.confra.api.util;
 
 import java.security.SecureRandom;
 

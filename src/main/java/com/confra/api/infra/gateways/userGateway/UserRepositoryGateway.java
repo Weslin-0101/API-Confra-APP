@@ -8,9 +8,9 @@ import com.confra.api.domain.UserEntity;
 import com.confra.api.exceptions.RequestNotAllowedException;
 import com.confra.api.exceptions.RequiredObjectsIsNullException;
 import com.confra.api.exceptions.ResourceNotFoundException;
-import com.confra.api.infra.gateways.userGateway.UserEntityMapper;
 import com.confra.api.infra.persistence.repositories.UserRepository;
 import com.confra.api.infra.persistence.tables.User;
+import com.confra.api.util.RandomString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
